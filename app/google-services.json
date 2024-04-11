@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "602162062102",
+    "project_id": "crickstats-3c4ab",
+    "storage_bucket": "crickstats-3c4ab.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:602162062102:android:cfd12e545f25bcd1e3a637",
+        "android_client_info": {
+          "package_name": "com.example.cricstat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "602162062102-u4e7qcjkdneamnlufvagkc6cs65spv5p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.cricstat",
+            "certificate_hash": "2028f0c12e18c9cc6e86752bc0121151f1a5c834"
+          }
+        },
+        {
+          "client_id": "602162062102-hm16bg8srqdf25pe13mskciel6lpa4ad.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDiDgTEhvmQ2E9xgWpNaUFSUzlrLUvJWIk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "602162062102-hm16bg8srqdf25pe13mskciel6lpa4ad.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
