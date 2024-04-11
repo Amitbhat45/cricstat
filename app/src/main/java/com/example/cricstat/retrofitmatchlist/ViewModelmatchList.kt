@@ -13,14 +13,14 @@ import kotlinx.coroutines.launch
 
 
 class ViewModelmatchList  (private val repository: Repository1):ViewModel(){
-    private val _liveMatches = MutableLiveData<List<matchList>>()
-    val liveMatches: LiveData<List<matchList>> get() = _liveMatches
+    private val _liveMatches = MutableLiveData<matchList>()
+    val liveMatches: LiveData<matchList>get() = _liveMatches
 
-    private val _upcomingMatches = MutableLiveData<List<com.example.cricstat.retrofitmatchlist.dataclass.matchList>>()
-    val upcomingMatches: LiveData<List<com.example.cricstat.retrofitmatchlist.dataclass.matchList>> get() = _upcomingMatches
+    private val _upcomingMatches = MutableLiveData<com.example.cricstat.retrofitmatchlist.dataclass.matchList>()
+    val upcomingMatches: LiveData<com.example.cricstat.retrofitmatchlist.dataclass.matchList> get() = _upcomingMatches
 
-    private val _recentMatches = MutableLiveData<List<com.example.cricstat.retrofitmatchlist.dataclass.matchList>>()
-    val recentMatches: LiveData<List<com.example.cricstat.retrofitmatchlist.dataclass.matchList>> get() = _recentMatches
+    private val _recentMatches = MutableLiveData<com.example.cricstat.retrofitmatchlist.dataclass.matchList>()
+    val recentMatches: LiveData<com.example.cricstat.retrofitmatchlist.dataclass.matchList> get() = _recentMatches
 
 
     init {
@@ -42,8 +42,10 @@ class ViewModelmatchList  (private val repository: Repository1):ViewModel(){
     private fun fetchLiveMatches() {
         viewModelScope.launch {
             val response = repository.getLiveMatches()
-            if (response.isSuccessful) {
-                _liveMatches.value = response.body()
+            if (response != null) {
+                if (response.isSuccessful) {
+                    _liveMatches.value = response.body()
+                }
             }
         }
     }
@@ -51,8 +53,10 @@ class ViewModelmatchList  (private val repository: Repository1):ViewModel(){
     private fun fetchUpcomingMatches() {
         viewModelScope.launch {
             val response = repository.getUpcomingMatches()
-            if (response.isSuccessful) {
-                _upcomingMatches.value = response.body()
+            if (response != null) {
+                if (response.isSuccessful) {
+                    _upcomingMatches.value = response.body()
+                }
             }
         }
     }
@@ -60,8 +64,10 @@ class ViewModelmatchList  (private val repository: Repository1):ViewModel(){
     private fun fetchRecentMatches() {
         viewModelScope.launch {
             val response = repository.getRecentMatches()
-            if (response.isSuccessful) {
-                _recentMatches.value = response.body()
+            if (response != null) {
+                if (response.isSuccessful) {
+                    _recentMatches.value = response.body()
+                }
             }
         }
     }

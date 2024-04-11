@@ -17,6 +17,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.runtime.rememberCoroutineScope
 import com.example.cricstat.retrofitmatchlist.Repository1
+import com.example.cricstat.retrofitmatchlist.dataclass.Matche
+import com.example.cricstat.retrofitmatchlist.dataclass.TypeMatche
 import com.example.cricstat.retrofitmatchlist.dataclass.matchList
 import com.example.cricstat.retrofitmatchlist.retrofitInstance
 
@@ -62,7 +64,7 @@ fun MainSCreen(userData: UserData?,
 
     // Use the ViewModelProvider to get the ViewModel instance with the custom factory
     val viewModel: ViewModelmatchList by viewModel(factory = factory)*/
-    val viewModelScope = rememberCoroutineScope()
+
 
 val matchList=retrofitInstance.ProvideApi(retrofitInstance.provideRetrofit())
     val repository=Repository1(matchList)
@@ -74,22 +76,30 @@ val matchList=retrofitInstance.ProvideApi(retrofitInstance.provideRetrofit())
     MatchListScreen(viewModel = myViewModel)
 }
 @Composable
-fun MatchListScreen(viewModel: ViewModelmatchList ) {
-    /*val liveMatches by viewModel.liveMatches.observeAsState(initial = emptyList())
-    val upcomingMatches by viewModel.upcomingMatches.observeAsState(initial = emptyList())*/
-    val recentMatches by viewModel.recentMatches.observeAsState(initial = emptyList())
+fun MatchListScreen(viewModel: ViewModelmatchList) {
+    val recentMatches by viewModel.recentMatches.observeAsState(initial = null)
 
-    LazyColumn {
-        items(recentMatches) { scorecard ->
-            ScorecardCard(scorecard = scorecard)
+    recentMatches?.let { matchList ->
+        val allMatches = mutableListOf<Matche>()
+        for (typeMatche in matchList.typeMatches) {
+            for (seriesMatche in typeMatche.seriesMatches ?: emptyList()) {
+                seriesMatche.seriesAdWrapper?.matches?.let { matches ->
+                    allMatches.addAll(matches)
+                }
+            }
+        }
+
+        LazyColumn {
+            items(allMatches) { match ->
+                ScorecardCard(match = match)
+            }
         }
     }
-
-    // Display the matches using LazyColumn or any other UI component
 }
 
+
 @Composable
-fun ScorecardCard(scorecard: matchList) {
+fun ScorecardCard(match:Matche) {
     Card(
         shape = RoundedCornerShape(8.dp),
 
@@ -100,7 +110,7 @@ fun ScorecardCard(scorecard: matchList) {
         Column(
             modifier = Modifier.padding(16.dp)
         ) {
-            Text(text = "${scorecard.typeMatches}")
+            Text(text = "${match.matchInfo.stateTitle}")
 
         }
     }
