@@ -107,5 +107,9 @@ dependencies {
     //implementation ("androidx.hilt:hilt-navigation-compose:1.2.0")
 
     //implementation ("com.example:retrofit-retry:1.0.0")
+
+    implementation ("com.github.PratikFagadiya:AnimatedSmoothBottomNavigation-JetpackCompose:1.1.1")
 }
+
+
 

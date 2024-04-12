@@ -143,7 +143,7 @@ class MainActivity : ComponentActivity() {
 
                                         navController.popBackStack()
                                     }
-                                }
+                                },navController
                             )
                         }
 
