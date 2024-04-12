@@ -1,14 +1,5 @@
 package com.example.cricstat.navigation
 
-import android.content.Context
-import androidx.compose.runtime.Composable
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-
-import androidx.navigation.compose.rememberNavController
-import com.example.cricstat.screens.MainSCreen
-import com.example.cricstat.screens.login1
-
 /*
 @Composable
 fun navigation(context: Context) {

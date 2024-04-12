@@ -1,6 +1,9 @@
-package com.example.cricstat.screens
+package com.example.cricstat.screens.Mains
 
+import android.annotation.SuppressLint
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -15,16 +18,48 @@ import com.example.cricstat.sign_in.UserData
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalContext
 import com.example.cricstat.retrofitmatchlist.Repository1
 import com.example.cricstat.retrofitmatchlist.dataclass.Matche
 import com.example.cricstat.retrofitmatchlist.dataclass.TypeMatche
 import com.example.cricstat.retrofitmatchlist.dataclass.matchList
 import com.example.cricstat.retrofitmatchlist.retrofitInstance
 
+
+@Composable
+fun setStatusBarColor(color: Color) {
+    val context = LocalContext.current
+    val window = (context as? ComponentActivity)?.window
+    window?.statusBarColor = color.toArgb()
+}
+@OptIn(ExperimentalMaterial3Api::class)
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun MainSCreen(userData: UserData?,
                onSignOut: () -> Unit,){
+    setStatusBarColor(color = Color(0xff22212f))
+    Surface (modifier = Modifier.fillMaxSize(),
+        color = Color(0xff22212f)
+    ){
+        Scaffold (containerColor = Color(0xff22212f)){
+            Column {
+                Column (modifier = Modifier
+                    .padding(top = 30.dp)
+                    .padding(start = 20.dp)){
+                    TopAppBar(userData = userData)
+                }
+
+                Text(text = "Hello, World!", modifier = Modifier.padding(100.dp))
+            }
+        }
+    }
 
     /*Column(
         modifier = Modifier.fillMaxSize(),
@@ -66,16 +101,16 @@ fun MainSCreen(userData: UserData?,
     val viewModel: ViewModelmatchList by viewModel(factory = factory)*/
 
 
-val matchList=retrofitInstance.ProvideApi(retrofitInstance.provideRetrofit())
+/*val matchList=retrofitInstance.ProvideApi(retrofitInstance.provideRetrofit())
     val repository=Repository1(matchList)
-    /*val myViewModel: ViewModelmatchList= viewModel(
+    *//*val myViewModel: ViewModelmatchList= viewModel(
         factory = MyViewModelFactory(repository)
-    )*/
+    )*//*
     val myViewModel=ViewModelmatchList(repository)
 
-    MatchListScreen(viewModel = myViewModel)
+    MatchListScreen(viewModel = myViewModel)*/
 }
-@Composable
+/*@Composable
 fun MatchListScreen(viewModel: ViewModelmatchList) {
     val recentMatches by viewModel.recentMatches.observeAsState(initial = null)
 
@@ -111,7 +146,8 @@ fun ScorecardCard(match:Matche) {
             modifier = Modifier.padding(16.dp)
         ) {
             Text(text = "${match.matchInfo.stateTitle}")
+            Text(text = "${match.matchInfo.seriesName}")
 
         }
     }
-}
+}*/

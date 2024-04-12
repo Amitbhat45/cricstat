@@ -9,5 +9,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="tel_black">#FF181818</color>
     <color name="tel_skyblue">#ff2da5e0</color>
+    <color name="main_screen_backg">#22212f</color>
 </resources>
 

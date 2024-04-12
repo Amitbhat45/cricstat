@@ -1,6 +1,5 @@
 package com.example.cricstat
 
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -12,33 +11,23 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.cricstat.ui.theme.CricstatTheme
-import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.cricstat.retrofitmatchlist.Repository1
-import com.example.cricstat.retrofitmatchlist.ViewModelmatchList
-import com.example.cricstat.retrofitmatchlist.matchList
-import com.example.cricstat.retrofitmatchlist.retrofitInstance
 
-import com.example.cricstat.screens.MainSCreen
-import com.example.cricstat.screens.login1
+import com.example.cricstat.screens.Mains.MainSCreen
+import com.example.cricstat.screens.Logins.login1
 import com.example.cricstat.sign_in.GoogleAuthUiClient
 import com.example.cricstat.sign_in.SignInViewModel
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.auth.api.identity.SignInClient
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
