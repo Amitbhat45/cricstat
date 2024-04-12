@@ -46,17 +46,20 @@ fun MainSCreen(userData: UserData?,
                onSignOut: () -> Unit,){
     setStatusBarColor(color = Color(0xff22212f))
     Surface (modifier = Modifier.fillMaxSize(),
-        color = Color(0xff22212f)
+        color = Color(0xff22212f),
+
     ){
-        Scaffold (containerColor = Color(0xff22212f)){
+        Scaffold (containerColor = Color(0xff22212f),
+            modifier = Modifier.padding(all=30.dp),
+            bottomBar = { BottomAppBarr()}){
             Column {
                 Column (modifier = Modifier
-                    .padding(top = 30.dp)
-                    .padding(start = 20.dp)){
+                    //.padding(top = 30.dp)
+                    .padding(start = 12.dp)){
                     TopAppBar(userData = userData)
                 }
 
-                Text(text = "Hello, World!", modifier = Modifier.padding(100.dp))
+
             }
         }
     }
