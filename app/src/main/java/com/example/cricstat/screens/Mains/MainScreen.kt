@@ -26,7 +26,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
-import androidx.navigation.NavController
 import com.example.cricstat.retrofitmatchlist.Repository1
 import com.example.cricstat.retrofitmatchlist.dataclass.Matche
 import com.example.cricstat.retrofitmatchlist.dataclass.TypeMatche
@@ -44,7 +43,7 @@ fun setStatusBarColor(color: Color) {
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun MainSCreen(userData: UserData?,
-               onSignOut: () -> Unit,navController: NavController){
+               onSignOut: () -> Unit,){
     setStatusBarColor(color = Color(0xff22212f))
     Surface (modifier = Modifier.fillMaxSize(),
         color = Color(0xff22212f)
