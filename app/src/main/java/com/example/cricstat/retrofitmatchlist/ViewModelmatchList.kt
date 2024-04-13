@@ -1,5 +1,8 @@
 package com.example.cricstat.retrofitmatchlist
 
+import android.graphics.BitmapFactory
+import android.net.Uri
+import android.provider.MediaStore
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -22,11 +25,15 @@ class ViewModelmatchList  (private val repository: Repository1):ViewModel(){
     private val _recentMatches = MutableLiveData<com.example.cricstat.retrofitmatchlist.dataclass.matchList>()
     val recentMatches: LiveData<com.example.cricstat.retrofitmatchlist.dataclass.matchList> get() = _recentMatches
 
+    private val _imageBytes = MutableLiveData<ByteArray?>()
+    val imageBytes: MutableLiveData<ByteArray?> get() = _imageBytes
+
 
     init {
         fetchLiveMatches()
         fetchUpcomingMatches()
         fetchRecentMatches()
+
     }
 
     /*init {
@@ -68,6 +75,17 @@ class ViewModelmatchList  (private val repository: Repository1):ViewModel(){
                 if (response.isSuccessful) {
                     _recentMatches.value = response.body()
                 }
+            }
+        }
+    }
+
+    fun fetchImage(imageId: String) {
+        viewModelScope.launch {
+            val response = repository.getImage(imageId)
+            if (response != null && response.isSuccessful) {
+                // Convert the ResponseBody to a byte array
+                val imageBytes = response.body()?.bytes()
+                _imageBytes.value = imageBytes
             }
         }
     }
