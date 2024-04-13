@@ -25,8 +25,8 @@ class ViewModelmatchList  (private val repository: Repository1):ViewModel(){
     private val _recentMatches = MutableLiveData<com.example.cricstat.retrofitmatchlist.dataclass.matchList>()
     val recentMatches: LiveData<com.example.cricstat.retrofitmatchlist.dataclass.matchList> get() = _recentMatches
 
-    private val _imageBytes = MutableLiveData<ByteArray?>()
-    val imageBytes: MutableLiveData<ByteArray?> get() = _imageBytes
+    /*private val _imageBytes = MutableLiveData<ByteArray?>()
+    val imageBytes: MutableLiveData<ByteArray?> get() = _imageBytes*/
 
 
     init {
@@ -79,7 +79,7 @@ class ViewModelmatchList  (private val repository: Repository1):ViewModel(){
         }
     }
 
-    fun fetchImage(imageId: String) {
+/*    fun fetchImage(imageId: String) {
         viewModelScope.launch {
             val response = repository.getImage(imageId)
             if (response != null && response.isSuccessful) {
@@ -88,7 +88,7 @@ class ViewModelmatchList  (private val repository: Repository1):ViewModel(){
                 _imageBytes.value = imageBytes
             }
         }
-    }
+    }*/
 
 }
 

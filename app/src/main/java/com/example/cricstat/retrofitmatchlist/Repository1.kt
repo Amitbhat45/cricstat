@@ -15,9 +15,9 @@ class Repository1(private val matchList:  matchList) {
         return matchList.getRecentMatches()
     }
 
-    suspend fun getImage(imageId: String):Response<ResponseBody>?{
+   /* suspend fun getImage(imageId: String):Response<ResponseBody>?{
         return matchList.getImage(imageId)
-    }
+    }*/
 }
 
 

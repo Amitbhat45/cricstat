@@ -43,7 +43,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
-import com.example.cricstat.retrofitmatchlist.ImageFetcher
+
 import com.example.cricstat.retrofitmatchlist.ViewModelmatchList
 import com.example.cricstat.retrofitmatchlist.dataclass.MatchInfo
 import com.example.cricstat.retrofitmatchlist.dataclass.Matche
@@ -53,9 +53,7 @@ import org.checkerframework.checker.units.qual.C
 @Composable
 fun getLiveMatches(viewModel:ViewModelmatchList) {
     val liveMatches by viewModel.liveMatches.observeAsState(initial = null)
-    val imageFetcher = ImageFetcher(viewModel)
-    val imageBytes by viewModel.imageBytes.observeAsState()
-    val bitmap = imageBytes?.let { BitmapFactory.decodeByteArray(it, 0, it.size) }
+
 
     liveMatches?.let { matchList ->
         val allMatches = mutableListOf<Matche>()
@@ -68,26 +66,28 @@ fun getLiveMatches(viewModel:ViewModelmatchList) {
         }
         LazyRow {
             items(allMatches) { match ->
-                if (bitmap != null) {
-                    liveScoreCard(match = match,imageFetcher,bitmap)
+
+                    liveScoreCard(match = match)
                 }
             }
         }
     }
 
-}
+
 
 @Composable
-fun liveScoreCard(match:Matche,imageFetcher: ImageFetcher,bitmap: Bitmap) {
-    Card(
+fun liveScoreCard(match:Matche) {
+    OutlinedCard(
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface,
+        ),
+        border = BorderStroke(1.dp, Color.White), // Increase border thickness and color for a shining effect
         shape = RoundedCornerShape(32.dp),
         modifier = Modifier
             .width(280.dp)
             .padding(15.dp)
             .height(210.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = Color.Transparent // Make the card's background transparent
-        ), elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
     ) {
         Box(
             modifier = Modifier
@@ -138,12 +138,10 @@ fun liveScoreCard(match:Matche,imageFetcher: ImageFetcher,bitmap: Bitmap) {
                 }
                 Spacer(modifier = Modifier.height(8.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    imageFetcher.fetchImage(match.matchInfo.team1.imageId.toString())
-                    bitmap?.asImageBitmap()?.let {
-                        Image(bitmap = it, contentDescription = "", modifier = Modifier
+                        /*Image(, contentDescription = "", modifier = Modifier
                             .size(55.dp)
-                            .padding(start = 15.dp))
-                    }
+                            .padding(start = 15.dp))*/
+
                     Spacer(modifier = Modifier.width(100.dp))
                     Text(text = "300-7", color = Color(0xFF000101),style = TextStyle(fontSize = 20.sp), fontWeight = FontWeight.Bold)
                     Spacer(modifier = Modifier.width(5.dp))
