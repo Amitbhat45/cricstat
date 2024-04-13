@@ -2,9 +2,12 @@ package com.example.cricstat.screens.Mains
 
 import android.annotation.SuppressLint
 import androidx.activity.ComponentActivity
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
@@ -31,6 +34,7 @@ import com.example.cricstat.retrofitmatchlist.dataclass.Matche
 import com.example.cricstat.retrofitmatchlist.dataclass.TypeMatche
 import com.example.cricstat.retrofitmatchlist.dataclass.matchList
 import com.example.cricstat.retrofitmatchlist.retrofitInstance
+import com.example.cricstat.screens.Mains.matches.getLiveMatches
 
 
 @Composable
@@ -44,19 +48,36 @@ fun setStatusBarColor(color: Color) {
 @Composable
 fun MainSCreen(userData: UserData?,
                onSignOut: () -> Unit,){
+
+    val matchList=retrofitInstance.ProvideApi(retrofitInstance.provideRetrofit())
+    val repository=Repository1(matchList)
+    /*val myViewModel: ViewModelmatchList= viewModel(
+        factory = MyViewModelFactory(repository)
+    )*/
+    val myViewModel=ViewModelmatchList(repository)
+    
+    
     setStatusBarColor(color = Color(0xff22212f))
+    
+    
     Surface (modifier = Modifier.fillMaxSize(),
         color = Color(0xff22212f),
 
     ){
         Scaffold (containerColor = Color(0xff22212f),
-            modifier = Modifier.padding(all=30.dp),
-            bottomBar = { BottomAppBarr()}){
+            modifier = Modifier.padding(all=5.dp),
+            bottomBar = {  Box(modifier = Modifier.padding(all = 30.dp)) { // Wrap the BottomAppBar in a Box and apply 30.dp padding
+                BottomAppBarr()
+            }}){
             Column {
                 Column (modifier = Modifier
                     //.padding(top = 30.dp)
-                    .padding(start = 12.dp)){
-                    TopAppBar(userData = userData)
+                    .padding(start = 17.dp)){
+                    Box(modifier = Modifier.padding(start = 5.dp)){
+                        TopAppBar(userData = userData)
+                    }
+                    Spacer(modifier = Modifier.height(27.dp))
+                    getLiveMatches(viewModel = myViewModel)
                 }
 
 
@@ -104,14 +125,9 @@ fun MainSCreen(userData: UserData?,
     val viewModel: ViewModelmatchList by viewModel(factory = factory)*/
 
 
-/*val matchList=retrofitInstance.ProvideApi(retrofitInstance.provideRetrofit())
-    val repository=Repository1(matchList)
-    *//*val myViewModel: ViewModelmatchList= viewModel(
-        factory = MyViewModelFactory(repository)
-    )*//*
-    val myViewModel=ViewModelmatchList(repository)
 
-    MatchListScreen(viewModel = myViewModel)*/
+
+    
 }
 /*@Composable
 fun MatchListScreen(viewModel: ViewModelmatchList) {
