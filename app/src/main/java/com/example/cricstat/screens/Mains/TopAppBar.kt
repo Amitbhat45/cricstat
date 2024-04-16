@@ -33,7 +33,7 @@ fun TopAppBar(userData: UserData?){
     Row ( verticalAlignment = Alignment.CenterVertically){
         Image(painter = painterResource(id = R.drawable.filter), contentDescription = "", modifier = Modifier.size(35.dp), colorFilter = ColorFilter.tint(
             Color.White))
-        Spacer(modifier = Modifier.width(270.dp))
+        Spacer(modifier = Modifier.width(290.dp))
         if(userData?.profilePictureUrl != null) {
             AsyncImage(
                 model = userData.profilePictureUrl,

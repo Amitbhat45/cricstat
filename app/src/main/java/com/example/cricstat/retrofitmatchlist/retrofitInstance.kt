@@ -19,11 +19,10 @@ object retrofitInstance {
             val request = requestBuilder.build()
             chain.proceed(request)
         }
-        //.addInterceptor(RateLimitInterceptor(200L)) // 200ms delay between requests
+
         .build()
 
-    /*private val BASE_DELAY_MILLIS = 200L
-    private val rateLimiter = CoroutineRateLimiter(5, 1, TimeUnit.SECONDS)*/
+
     fun ProvideApi(builder:Retrofit.Builder):matchList{
         return builder.build()
             .create(matchList::class.java)
@@ -34,24 +33,9 @@ object retrofitInstance {
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
-            //.addCallAdapterFactory(RetrofitRetry.create())
-    }
-/*
-    val instance: matchList by lazy {
-        Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(client)
-            .build()
-            .create(matchList::class.java)
 
-    }*/
+    }
+
 
 }
-/*
-class RateLimitInterceptor(private val delayMillis: Long) : Interceptor {
-    override fun intercept(chain: Interceptor.Chain): okhttp3.Response {
-        Thread.sleep(delayMillis) // Introduce a delay before the request
-        return chain.proceed(chain.request())
-    }
-}*/
+

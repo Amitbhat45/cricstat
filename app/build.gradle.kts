@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -40,6 +42,7 @@ android {
 
     kotlinOptions {
         jvmTarget = "1.8"
+        languageVersion = "1.9"
     }
 
     buildFeatures {
@@ -108,5 +111,14 @@ dependencies {
 
     //implementation ("com.example:retrofit-retry:1.0.0")
     implementation("com.exyte:animated-navigation-bar:1.0.0")
+
+    implementation ("com.github.bumptech.glide:glide:4.12.0")
+    annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
+    implementation ("com.github.bumptech.glide:compose:1.0.0-beta01")
 }
 
+/*
+val compileKotlin: KotlinCompile by tasks
+compileKotlin.kotlinOptions {
+    languageVersion = "1.9"
+}*/

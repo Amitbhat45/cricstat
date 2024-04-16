@@ -2,6 +2,7 @@ package com.example.cricstat.screens.Mains
 
 import android.annotation.SuppressLint
 import androidx.activity.ComponentActivity
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -19,13 +20,22 @@ import androidx.compose.ui.unit.dp
 import com.example.cricstat.retrofitmatchlist.ViewModelmatchList
 import com.example.cricstat.sign_in.UserData
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
+import androidx.compose.material3.TabRowDefaults
+import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
@@ -35,6 +45,7 @@ import com.example.cricstat.retrofitmatchlist.dataclass.TypeMatche
 import com.example.cricstat.retrofitmatchlist.dataclass.matchList
 import com.example.cricstat.retrofitmatchlist.retrofitInstance
 import com.example.cricstat.screens.Mains.matches.getLiveMatches
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -43,11 +54,16 @@ fun setStatusBarColor(color: Color) {
     val window = (context as? ComponentActivity)?.window
     window?.statusBarColor = color.toArgb()
 }
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class,
+    ExperimentalStdlibApi::class
+)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun MainSCreen(userData: UserData?,
                onSignOut: () -> Unit,){
+    val scope = rememberCoroutineScope()
+    val pagerState = rememberPagerState(pageCount = { hometabs.size})
+    val selectedTabIndex = remember { derivedStateOf { pagerState.currentPage } }
 
     val matchList=retrofitInstance.ProvideApi(retrofitInstance.provideRetrofit())
     val repository=Repository1(matchList)
@@ -72,12 +88,53 @@ fun MainSCreen(userData: UserData?,
             Column {
                 Column (modifier = Modifier
                     //.padding(top = 30.dp)
-                    .padding(start = 17.dp)){
-                    Box(modifier = Modifier.padding(start = 5.dp)){
+                    .padding(start = 0.dp)){
+                    Box(modifier = Modifier.padding(start = 8.dp)){
                         TopAppBar(userData = userData)
                     }
-                    Spacer(modifier = Modifier.height(27.dp))
-                    getLiveMatches(viewModel = myViewModel)
+                    Spacer(modifier = Modifier.height(10.dp))
+                    TabRow(
+                        selectedTabIndex = selectedTabIndex.value,
+                        modifier = Modifier.fillMaxWidth(),
+                        containerColor = Color(0xFF22212f),
+                        indicator = { tabPositions ->
+                            TabRowDefaults.Indicator(
+                                color = Color(0xFF8fcce3), // Change the color here
+                                modifier = Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex.value])
+                            )
+                        }
+
+                    ) {
+                        hometabs.forEachIndexed { index, currentTab ->
+                            Tab(
+                                selected = selectedTabIndex.value == index,
+                                selectedContentColor = Color(0xFFffffff),
+                                unselectedContentColor = MaterialTheme.colorScheme.outline,
+                                onClick = {
+                                    scope.launch {
+                                        pagerState.animateScrollToPage(currentTab.index)
+                                    }
+                                },
+                                text = { Text(text = hometabs[index].txt1) },
+
+                            )
+                        }
+                    }
+
+                    HorizontalPager(
+                        state = pagerState,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                    ) {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(text = hometabs[selectedTabIndex.value].txt1)
+                        }
+                    }
+                    //getLiveMatches(viewModel = myViewModel)
                 }
 
 
@@ -169,4 +226,41 @@ fun ScorecardCard(match:Matche) {
 
         }
     }
+}*//*
+enum class HomeTabs(
+
+    val text: String
+) {
+    Shop(
+
+        text = "Live"
+    ),
+    Favourite(
+
+        text = "Recent"
+    ),
+    Profile(
+
+        text = "Upcoming"
+    )
 }*/
+data class HomeTabs(
+    val index: Int,
+    var txt1: String
+)
+
+val hometabs= listOf(
+    HomeTabs(
+        0,
+        "Live"
+    ),
+    HomeTabs(
+        1,
+        "Recent"
+    ),
+    HomeTabs(
+        2,
+        "Upcoming"
+    )
+
+)
