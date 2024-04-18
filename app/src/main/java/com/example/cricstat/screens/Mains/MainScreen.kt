@@ -3,16 +3,22 @@ package com.example.cricstat.screens.Mains
 import android.annotation.SuppressLint
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
+import com.example.cricstat.R
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.unit.sp
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
@@ -39,12 +45,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import com.example.cricstat.retrofitmatchlist.Repository1
 import com.example.cricstat.retrofitmatchlist.dataclass.Matche
 import com.example.cricstat.retrofitmatchlist.dataclass.TypeMatche
 import com.example.cricstat.retrofitmatchlist.dataclass.matchList
 import com.example.cricstat.retrofitmatchlist.retrofitInstance
-import com.example.cricstat.screens.Mains.matches.getLiveMatches
+import com.example.cricstat.screens.Mains.matches.getLiveIntMatches
+import com.example.cricstat.screens.Mains.matches.getLiveLegMatches
+
 import kotlinx.coroutines.launch
 
 
@@ -73,14 +85,14 @@ fun MainSCreen(userData: UserData?,
     val myViewModel=ViewModelmatchList(repository)
     
     
-    setStatusBarColor(color = Color(0xff22212f))
+    setStatusBarColor(color = Color(0xff1b1a25))
     
     
     Surface (modifier = Modifier.fillMaxSize(),
-        color = Color(0xff22212f),
+        color = Color(0xff1b1a25),
 
     ){
-        Scaffold (containerColor = Color(0xff22212f),
+        Scaffold (containerColor = Color(0xff1b1a25),
             modifier = Modifier.padding(all=5.dp),
             bottomBar = {  Box(modifier = Modifier.padding(all = 30.dp)) { // Wrap the BottomAppBar in a Box and apply 30.dp padding
                 BottomAppBarr()
@@ -96,7 +108,7 @@ fun MainSCreen(userData: UserData?,
                     TabRow(
                         selectedTabIndex = selectedTabIndex.value,
                         modifier = Modifier.fillMaxWidth(),
-                        containerColor = Color(0xFF22212f),
+                        containerColor = Color(0xFF1b1a25),
                         indicator = { tabPositions ->
                             TabRowDefaults.Indicator(
                                 color = Color(0xFF8fcce3), // Change the color here
@@ -131,7 +143,38 @@ fun MainSCreen(userData: UserData?,
                             modifier = Modifier.fillMaxSize(),
                             contentAlignment = Alignment.Center
                         ) {
-                            Text(text = hometabs[selectedTabIndex.value].txt1)
+                            Column (modifier = Modifier.fillMaxSize()){
+
+                                if(hometabs[selectedTabIndex.value].txt1=="Live"){
+                                    Row(verticalAlignment = Alignment.CenterVertically,modifier = Modifier.padding(start=13.dp,top=8.dp)) {
+                                        Image(painter = painterResource(id = R.drawable.img_3), contentDescription = "",
+                                            modifier = Modifier.size(16.dp))
+                                        Spacer(modifier = Modifier.width(0.8.dp))
+                                        Text(text = "International", style = TextStyle(fontSize = 18.sp) ,
+                                            color= Color(0xFFd5ac6c),fontWeight = FontWeight.W600,
+                                        )
+                                    }
+                                    Spacer(modifier = Modifier.height(3.dp))
+                                    getLiveIntMatches(viewModel = myViewModel)
+                                    Spacer(modifier = Modifier.height(5.dp))
+                                    Row(verticalAlignment = Alignment.CenterVertically,modifier = Modifier.padding(start=13.dp,top=8.dp)) {
+                                        Image(painter = painterResource(id = R.drawable.img_3), contentDescription = "",
+                                            modifier = Modifier.size(16.dp))
+                                        Spacer(modifier = Modifier.width(0.8.dp))
+                                        Text(text = "International", style = TextStyle(fontSize = 18.sp) ,
+                                            color= Color(0xFFd5ac6c),fontWeight = FontWeight.W600,
+                                        )
+                                    }
+                                    Spacer(modifier = Modifier.height(3.dp))
+                                    getLiveLegMatches(viewModel = myViewModel)
+                                }
+                                else{
+                                    Text(text = hometabs[selectedTabIndex.value].txt1)
+                                }
+                            }
+                            //Text(text = hometabs[selectedTabIndex.value].txt1)
+
+
                         }
                     }
                     //getLiveMatches(viewModel = myViewModel)
