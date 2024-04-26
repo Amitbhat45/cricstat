@@ -24,6 +24,7 @@ import androidx.navigation.compose.rememberNavController
 
 import com.example.cricstat.screens.Mains.MainSCreen
 import com.example.cricstat.screens.Logins.login1
+import com.example.cricstat.screens.Mains.loginprofile
 import com.example.cricstat.sign_in.GoogleAuthUiClient
 import com.example.cricstat.sign_in.SignInViewModel
 import com.google.android.gms.auth.api.identity.Identity
@@ -145,6 +146,23 @@ class MainActivity : ComponentActivity() {
                                     }
                                 }
                             )
+                        }
+                        composable("loginprofile"){
+                            loginprofile(userData =googleAuthUiClient.getSignedInUser(),
+                                onSignOut = {
+                                    lifecycleScope.launch {
+                                        googleAuthUiClient.signOut()
+                                        Toast.makeText(
+                                            applicationContext,
+                                            "Signed out",
+                                            Toast.LENGTH_LONG
+                                        ).show()
+
+                                        navController.popBackStack()
+                                    }
+                                } )
+
+
                         }
 
                     }

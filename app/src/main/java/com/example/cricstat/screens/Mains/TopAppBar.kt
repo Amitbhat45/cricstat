@@ -2,6 +2,7 @@ package com.example.cricstat.screens.Mains
 
 import android.graphics.fonts.FontStyle
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -24,6 +25,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.cricstat.sign_in.UserData
 
@@ -31,9 +33,9 @@ import com.example.cricstat.sign_in.UserData
 @Composable
 fun TopAppBar(userData: UserData?){
     Row ( verticalAlignment = Alignment.CenterVertically){
-        Image(painter = painterResource(id = R.drawable.filter), contentDescription = "", modifier = Modifier.size(35.dp), colorFilter = ColorFilter.tint(
-            Color.White))
-        Spacer(modifier = Modifier.width(290.dp))
+        Image(painter = painterResource(id = R.drawable.topbarlogo), contentDescription = "", modifier = Modifier.size(55.dp))
+
+        Spacer(modifier = Modifier.width(270.dp))
         if(userData?.profilePictureUrl != null) {
             AsyncImage(
                 model = userData.profilePictureUrl,
@@ -41,7 +43,8 @@ fun TopAppBar(userData: UserData?){
                 modifier = Modifier
                     .size(32.dp)
                     .clip(CircleShape),
-                contentScale = ContentScale.Crop
+                contentScale = ContentScale.Crop,
+
             )
 
         }

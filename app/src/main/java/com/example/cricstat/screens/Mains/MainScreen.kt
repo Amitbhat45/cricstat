@@ -28,7 +28,9 @@ import com.example.cricstat.sign_in.UserData
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -49,13 +51,21 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.navigation.NavController
 import com.example.cricstat.retrofitmatchlist.Repository1
 import com.example.cricstat.retrofitmatchlist.dataclass.Matche
 import com.example.cricstat.retrofitmatchlist.dataclass.TypeMatche
 import com.example.cricstat.retrofitmatchlist.dataclass.matchList
 import com.example.cricstat.retrofitmatchlist.retrofitInstance
+import com.example.cricstat.screens.Mains.matches.getLiveDomMatches
 import com.example.cricstat.screens.Mains.matches.getLiveIntMatches
 import com.example.cricstat.screens.Mains.matches.getLiveLegMatches
+import com.example.cricstat.screens.Mains.matches.getRecentDomMatches
+import com.example.cricstat.screens.Mains.matches.getRecentIntMatches
+import com.example.cricstat.screens.Mains.matches.getRecentLegMatches
+import com.example.cricstat.screens.Mains.matches.getUpcomingDomMatches
+import com.example.cricstat.screens.Mains.matches.getUpcomingIntMatches
+import com.example.cricstat.screens.Mains.matches.getUpcomingLegMatches
 
 import kotlinx.coroutines.launch
 
@@ -104,7 +114,7 @@ fun MainSCreen(userData: UserData?,
                     Box(modifier = Modifier.padding(start = 8.dp)){
                         TopAppBar(userData = userData)
                     }
-                    Spacer(modifier = Modifier.height(10.dp))
+                    Spacer(modifier = Modifier.height(4.dp))
                     TabRow(
                         selectedTabIndex = selectedTabIndex.value,
                         modifier = Modifier.fillMaxWidth(),
@@ -146,38 +156,143 @@ fun MainSCreen(userData: UserData?,
                             Column (modifier = Modifier.fillMaxSize()){
 
                                 if(hometabs[selectedTabIndex.value].txt1=="Live"){
-                                    Row(verticalAlignment = Alignment.CenterVertically,modifier = Modifier.padding(start=13.dp,top=8.dp)) {
-                                        Image(painter = painterResource(id = R.drawable.img_3), contentDescription = "",
-                                            modifier = Modifier.size(16.dp))
-                                        Spacer(modifier = Modifier.width(0.8.dp))
-                                        Text(text = "International", style = TextStyle(fontSize = 18.sp) ,
-                                            color= Color(0xFFd5ac6c),fontWeight = FontWeight.W600,
-                                        )
+                                   Column (modifier = Modifier
+                                       .fillMaxSize() // Fills the available space
+                                       .height(300.dp) // Sets a minimum height (adjust as needed)
+                                       .verticalScroll(rememberScrollState())) {
+                                       Spacer(modifier = Modifier.height(5.dp))
+                                        Row (verticalAlignment = Alignment.CenterVertically){
+                                            Image(painter = painterResource(id = R.drawable.img_3), contentDescription = "",modifier = Modifier.size(16.dp))
+                                            Spacer(modifier = Modifier.width(1.8.dp))
+                                            Text(
+                                                text = "International",
+                                                style = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.W600),
+                                                color = Color(0xFFe3b05f)
+                                            )
+                                        }
+                                        Spacer(modifier = Modifier.height(10.dp))
+                                        getLiveIntMatches(viewModel = myViewModel)
+                                        Spacer(modifier = Modifier.height(12.dp))
+                                        Row (verticalAlignment = Alignment.CenterVertically){
+                                            Image(painter = painterResource(id = R.drawable.leglogo), contentDescription = "",modifier = Modifier.size(16.dp))
+                                            Spacer(modifier = Modifier.width(1.8.dp))
+                                            Text(
+                                                text = "League",
+                                                style = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.W600),
+                                                color = Color(0xFFe3b05f)
+                                            )
+                                        }
+                                        Spacer(modifier = Modifier.height(10.dp))
+                                        getLiveLegMatches(viewModel = myViewModel)
+                                        Spacer(modifier = Modifier.height(12.dp))
+                                        Row (verticalAlignment = Alignment.CenterVertically){
+                                            Image(painter = painterResource(id = R.drawable.domesticlogo), contentDescription = "",modifier = Modifier.size(16.dp))
+                                            Spacer(modifier = Modifier.width(1.8.dp))
+                                            Text(
+                                                text = "Domestic",
+                                                style = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.W600),
+                                                color = Color(0xFFe3b05f)
+                                            )
+                                        }
+                                        Spacer(modifier = Modifier.height(10.dp))
+                                        getLiveDomMatches(viewModel = myViewModel)
+
                                     }
-                                    Spacer(modifier = Modifier.height(3.dp))
-                                    getLiveIntMatches(viewModel = myViewModel)
-                                    Spacer(modifier = Modifier.height(5.dp))
-                                    Row(verticalAlignment = Alignment.CenterVertically,modifier = Modifier.padding(start=13.dp,top=8.dp)) {
-                                        Image(painter = painterResource(id = R.drawable.img_3), contentDescription = "",
-                                            modifier = Modifier.size(16.dp))
-                                        Spacer(modifier = Modifier.width(0.8.dp))
-                                        Text(text = "International", style = TextStyle(fontSize = 18.sp) ,
-                                            color= Color(0xFFd5ac6c),fontWeight = FontWeight.W600,
-                                        )
-                                    }
-                                    Spacer(modifier = Modifier.height(3.dp))
-                                    getLiveLegMatches(viewModel = myViewModel)
                                 }
-                                else{
-                                    Text(text = hometabs[selectedTabIndex.value].txt1)
+                                else if(hometabs[selectedTabIndex.value].txt1=="Recent"){
+                                    Column (modifier = Modifier
+                                        .fillMaxSize() // Fills the available space
+                                        .height(300.dp) // Sets a minimum height (adjust as needed)
+                                        .verticalScroll(rememberScrollState())) {
+                                        Spacer(modifier = Modifier.height(5.dp))
+                                        Row (verticalAlignment = Alignment.CenterVertically){
+                                            Image(painter = painterResource(id = R.drawable.img_3), contentDescription = "",modifier = Modifier.size(16.dp))
+                                            Spacer(modifier = Modifier.width(1.8.dp))
+                                            Text(
+                                                text = "International",
+                                                style = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.W600),
+                                                color = Color(0xFFe3b05f)
+                                            )
+                                        }
+                                        Spacer(modifier = Modifier.height(10.dp))
+                                        getRecentIntMatches(viewModel = myViewModel)
+                                        Spacer(modifier = Modifier.height(12.dp))
+                                        Row (verticalAlignment = Alignment.CenterVertically){
+                                            Image(painter = painterResource(id = R.drawable.leglogo), contentDescription = "",modifier = Modifier.size(16.dp))
+                                            Spacer(modifier = Modifier.width(1.8.dp))
+                                            Text(
+                                                text = "League",
+                                                style = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.W600),
+                                                color = Color(0xFFe3b05f)
+                                            )
+                                        }
+                                        Spacer(modifier = Modifier.height(10.dp))
+                                        getRecentLegMatches(viewModel = myViewModel)
+                                        Spacer(modifier = Modifier.height(12.dp))
+                                        Row (verticalAlignment = Alignment.CenterVertically){
+                                            Image(painter = painterResource(id = R.drawable.domesticlogo), contentDescription = "",modifier = Modifier.size(16.dp))
+                                            Spacer(modifier = Modifier.width(1.8.dp))
+                                            Text(
+                                                text = "Domestic",
+                                                style = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.W600),
+                                                color = Color(0xFFe3b05f)
+                                            )
+                                        }
+                                        Spacer(modifier = Modifier.height(10.dp))
+                                        getRecentDomMatches(viewModel = myViewModel)
+
+                                    }
+                                }else{
+                                    Column (modifier = Modifier
+                                        .fillMaxSize() // Fills the available space
+                                        .height(300.dp) // Sets a minimum height (adjust as needed)
+                                        .verticalScroll(rememberScrollState())) {
+                                        Spacer(modifier = Modifier.height(5.dp))
+                                        Row (verticalAlignment = Alignment.CenterVertically){
+                                            Image(painter = painterResource(id = R.drawable.img_3), contentDescription = "",modifier = Modifier.size(16.dp))
+                                            Spacer(modifier = Modifier.width(1.8.dp))
+                                            Text(
+                                                text = "International",
+                                                style = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.W600),
+                                                color = Color(0xFFe3b05f)
+                                            )
+                                        }
+                                        Spacer(modifier = Modifier.height(10.dp))
+                                        getUpcomingIntMatches(viewModel = myViewModel)
+                                        Spacer(modifier = Modifier.height(12.dp))
+                                        Row (verticalAlignment = Alignment.CenterVertically){
+                                            Image(painter = painterResource(id = R.drawable.leglogo), contentDescription = "",modifier = Modifier.size(16.dp))
+                                            Spacer(modifier = Modifier.width(1.8.dp))
+                                            Text(
+                                                text = "League",
+                                                style = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.W600),
+                                                color = Color(0xFFe3b05f)
+                                            )
+                                        }
+                                        Spacer(modifier = Modifier.height(10.dp))
+                                        getUpcomingLegMatches(viewModel = myViewModel)
+                                        Spacer(modifier = Modifier.height(12.dp))
+                                        Row (verticalAlignment = Alignment.CenterVertically){
+                                            Image(painter = painterResource(id = R.drawable.domesticlogo), contentDescription = "",modifier = Modifier.size(16.dp))
+                                            Spacer(modifier = Modifier.width(1.8.dp))
+                                            Text(
+                                                text = "Domestic",
+                                                style = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.W600),
+                                                color = Color(0xFFe3b05f)
+                                            )
+                                        }
+                                        Spacer(modifier = Modifier.height(10.dp))
+                                        getUpcomingDomMatches(viewModel = myViewModel)
+
+                                    }
                                 }
                             }
-                            //Text(text = hometabs[selectedTabIndex.value].txt1)
+
 
 
                         }
                     }
-                    //getLiveMatches(viewModel = myViewModel)
+
                 }
 
 
