@@ -265,7 +265,7 @@ fun recentScoreCard(match:Matche) {
                         thickness = 1.dp, modifier = Modifier
                             .padding(top = 5.dp)
                             .size(width = 1.dp, height = 60.dp))
-                    Spacer(modifier = Modifier.width(15.dp))
+                    Spacer(modifier = Modifier.width(12.dp))
                     Text(text = "Finished", color = Color(0xFFFF7575))
                 }
 

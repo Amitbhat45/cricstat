@@ -174,7 +174,7 @@ fun MainSCreen(userData: UserData?,
                                         getLiveIntMatches(viewModel = myViewModel)
                                         Spacer(modifier = Modifier.height(12.dp))
                                         Row (verticalAlignment = Alignment.CenterVertically){
-                                            Image(painter = painterResource(id = R.drawable.leglogo), contentDescription = "",modifier = Modifier.size(16.dp))
+                                            Image(painter = painterResource(id = R.drawable.leglogo), contentDescription = "",modifier = Modifier.size(26.dp))
                                             Spacer(modifier = Modifier.width(1.8.dp))
                                             Text(
                                                 text = "League",
@@ -218,7 +218,7 @@ fun MainSCreen(userData: UserData?,
                                         getRecentIntMatches(viewModel = myViewModel)
                                         Spacer(modifier = Modifier.height(12.dp))
                                         Row (verticalAlignment = Alignment.CenterVertically){
-                                            Image(painter = painterResource(id = R.drawable.leglogo), contentDescription = "",modifier = Modifier.size(16.dp))
+                                            Image(painter = painterResource(id = R.drawable.leglogo), contentDescription = "",modifier = Modifier.size(26.dp))
                                             Spacer(modifier = Modifier.width(1.8.dp))
                                             Text(
                                                 text = "League",
@@ -261,7 +261,7 @@ fun MainSCreen(userData: UserData?,
                                         getUpcomingIntMatches(viewModel = myViewModel)
                                         Spacer(modifier = Modifier.height(12.dp))
                                         Row (verticalAlignment = Alignment.CenterVertically){
-                                            Image(painter = painterResource(id = R.drawable.leglogo), contentDescription = "",modifier = Modifier.size(16.dp))
+                                            Image(painter = painterResource(id = R.drawable.leglogo), contentDescription = "",modifier = Modifier.size(26.dp))
                                             Spacer(modifier = Modifier.width(1.8.dp))
                                             Text(
                                                 text = "League",

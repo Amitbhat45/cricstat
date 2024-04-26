@@ -260,7 +260,7 @@ fun upcomingScoreCard(match: Matche) {
                     }*/
 
 
-                Spacer(modifier = Modifier.height(4.5.dp))
+                Spacer(modifier = Modifier.height(5.dp))
                 val timestamp = match.matchInfo.startDate?.toLong() // Long type for milliseconds
                 val dateFormatter =
                     SimpleDateFormat("yyyy-MM-dd") // Customize date format as needed
@@ -461,7 +461,7 @@ fun upcomingLegDomScoreCard(match: Matche) {
 
 
                 }
-                Spacer(modifier = Modifier.height(4.5.dp))
+                Spacer(modifier = Modifier.height(5.dp))
                 val timestamp = match.matchInfo.startDate?.toLong() // Long type for milliseconds
                 val dateFormatter =
                     SimpleDateFormat("yyyy-MM-dd") // Customize date format as needed
