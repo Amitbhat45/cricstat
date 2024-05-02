@@ -1,6 +1,8 @@
-package com.example.cricstat.stat
+package com.example.cricstat.stat.Player1.batting
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -11,23 +13,41 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import okhttp3.OkHttpClient
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.select.Elements
-import java.net.SocketTimeoutException
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
- fun scrapingData(text:String): Deferred<List<String>>{
-
+ fun scrapingData1(text:String): Deferred<Pair<List<String>,List<String>>>{
+   // val timestamp = System.currentTimeMillis()
+    val client = OkHttpClient.Builder()
+        .cache(null) // Disable caching
+        .build()
      // val texts=text.split(" ")
     // Launch a coroutine in the IO dispatcher
     return remember {
         CoroutineScope(Dispatchers.IO).async {
             try {
+                val currentDate = LocalDate.now()
+                val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                val formattedDate = currentDate.format(formatter)
                 // Connect to the URL
-                val doc: Document = Jsoup.connect("http://www.cricmetric.com/playerstats.py?player=${text.split(" ")[0]}+${text.split(" ")[1]}&role=batsman&format=all&groupby=year&playerStatsFilters=on&start_date=2002-01-01&end_date=2024-04-26&tournament=ipl&start_over=0&end_over=9999&max_innings=1000")
-                    .timeout(100000) // Timeout in milliseconds
+                val doc: Document = Jsoup.connect("http://www.cricmetric.com/playerstats.py?player=${text.split(" ")[0]}+${text.split(" ")[1]}&role=batsman&format=all&groupby=year&playerStatsFilters=on&start_date=2002-01-01&end_date=$formattedDate&tournament=ipl&start_over=0&end_over=9999&max_innings=1000")
+                    .timeout(100000)
+                    .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3")
                     .get()
+
+                val foot:Elements=doc.select("tfoot tr")
+                val allYearStat = mutableListOf<String>()
+                for (row in foot) {
+                    // Extract text from each table data (<td>) element within the row
+                    val rowValues = row.select("td").map { it.text() }
+                    allYearStat.addAll(rowValues)  // Add row values to the list
+                }
 
                 // Find the table
                 val tableRows: Elements = doc.select("tbody tr")
@@ -52,10 +72,10 @@ import java.net.SocketTimeoutException
                 withContext(Dispatchers.Main) {
                     val firstRow = dataByYear[4]
                     val runs = firstRow[1]
-                    Log.d("CricmetricScraper", "Year: $firstRow ,runs $runs")
+                    Log.d("CricmetricScraper", "$allYearStat")
                 }
                 val firstRow = dataByYear[4]
-                return@async firstRow
+                return@async Pair(firstRow,allYearStat)
 
             } catch (e: Exception) {
                 Log.e("CricmetricScraper", "Error scraping data", e)
@@ -72,6 +92,6 @@ fun preeev(){
     val coroutineScope = rememberCoroutineScope()
     coroutineScope.launch {
         val text="Virat Kohli"
-       // scrapingData(text)
+
     }
 }

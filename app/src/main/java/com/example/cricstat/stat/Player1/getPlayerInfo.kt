@@ -1,4 +1,4 @@
-package com.example.cricstat.stat
+package com.example.cricstat.stat.Player1
 
 import android.util.Log
 import androidx.compose.runtime.Composable
@@ -13,12 +13,12 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 
 @Composable
-fun getinfo() :
+fun getinfo(name:String) :
         Deferred<Pair<String, List<String>>>{
     return remember {
         CoroutineScope(Dispatchers.IO).async {
             try {
-                val doc: Document = Jsoup.connect("http://www.cricmetric.com/playerstats.py?player=Virat+Kohli&role=all&format=all&groupby=player")
+                val doc: Document = Jsoup.connect("http://www.cricmetric.com/playerstats.py?player=${name.split(" ")[0]}+${name.split(" ")[1]}&role=all&format=all&groupby=player")
                     .timeout(100000)
                     .get()
                 val infocontainer=doc.select("div.panel-body").first()
@@ -56,5 +56,5 @@ fun getinfo() :
 @Preview
 @Composable
 fun pp1(){
-    getinfo()
+    //getinfo()
 }
