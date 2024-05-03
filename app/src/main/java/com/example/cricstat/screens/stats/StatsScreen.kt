@@ -1,6 +1,7 @@
 package com.example.cricstat.screens.stats
 
 import android.os.Build
+import androidx.activity.ComponentActivity
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -31,6 +32,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -41,7 +44,12 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.PopupProperties
 import com.example.cricstat.R
 import com.example.cricstat.stat.DisplayPlayerStats
-
+@Composable
+fun setStatusBarColor(color: Color) {
+    val context = LocalContext.current
+    val window = (context as? ComponentActivity)?.window
+    window?.statusBarColor = color.toArgb()
+}
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -50,9 +58,10 @@ fun PlayerStats(){
         .background(Color(0xFF171825))
         .fillMaxSize())
     Column (modifier = Modifier.fillMaxSize()){
+        com.example.cricstat.screens.Mains.setStatusBarColor(color = Color(0xFF171825))
 
-        Image(painter = painterResource(id = R.drawable.baseline_arrow_circle_left_24), contentDescription = "",
-            modifier = Modifier.padding(start=15.dp))
+        Image(painter = painterResource(id = R.drawable.baseline_arrow_back_24), contentDescription = "",
+            modifier = Modifier.padding(start=17.dp))
 
         Spacer(modifier = Modifier.height(30.dp))
         Row {
@@ -62,10 +71,6 @@ fun PlayerStats(){
             PlayerHeader("Rohit Sharma")
         }
        Spacer(modifier = Modifier.height(20.dp))
-
-
-        Spacer(modifier = Modifier.height(80.dp))
-
         Column (Modifier.verticalScroll(rememberScrollState())){
             DisplayPlayerStats()
         }

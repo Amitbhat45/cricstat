@@ -21,16 +21,17 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
-@Composable
- fun scrapingData1(text:String): Deferred<Pair<List<String>,List<String>>>{
+
+ fun scrapingData1(text:String,index:Int): Deferred<Pair<List<String>,List<String>>>{
    // val timestamp = System.currentTimeMillis()
     val client = OkHttpClient.Builder()
         .cache(null) // Disable caching
         .build()
      // val texts=text.split(" ")
     // Launch a coroutine in the IO dispatcher
-    return remember {
-        CoroutineScope(Dispatchers.IO).async {
+    val coroutineScope = CoroutineScope(Dispatchers.IO)
+
+    val deferredData = coroutineScope.async  {
             try {
                 val currentDate = LocalDate.now()
                 val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
@@ -51,13 +52,18 @@ import java.time.format.DateTimeFormatter
 
                 // Find the table
                 val tableRows: Elements = doc.select("tbody tr")
+                val years = mutableListOf<String>()
 
                 // Iterate through each row
                 val dataByYear = mutableListOf<List<String>>() // List of Lists (arrays) to store data for each row
 
                 for (row in tableRows) {
                     val cells: Elements = row.select("td")
+                    val firstCell = row.select("td").firstOrNull()
                     if (cells.isNotEmpty()) {
+                        if (firstCell != null) {
+                            years.add(firstCell.text())
+                        }
                         val rowData = mutableListOf<String>() // List to store data for this row
                         for (cell in cells) {
                             rowData.add(cell.text()) // Add cell text to the row data list
@@ -68,21 +74,25 @@ import java.time.format.DateTimeFormatter
                     }
                 }
 
+
+
                 // Log the data
                 withContext(Dispatchers.Main) {
                     val firstRow = dataByYear[4]
                     val runs = firstRow[1]
                     Log.d("CricmetricScraper", "$allYearStat")
                 }
-                val firstRow = dataByYear[4]
-                return@async Pair(firstRow,allYearStat)
+                dataByYear.add(0,allYearStat)
+                val firstRow = dataByYear[index]
+                years.add(0,"Years")
+                return@async Pair(firstRow,years)
 
             } catch (e: Exception) {
                 Log.e("CricmetricScraper", "Error scraping data", e)
                 throw e // Rethrow the exception so the caller can handle it
             }
         }
-    }
+    return deferredData
 }
 
 

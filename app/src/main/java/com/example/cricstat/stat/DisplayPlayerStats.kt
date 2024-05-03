@@ -46,289 +46,837 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.PopupProperties
+import com.example.cricstat.stat.Player1.batting.OdiData1
+import com.example.cricstat.stat.Player1.batting.T20Data1
 import com.example.cricstat.stat.Player1.batting.TestData1
 import com.example.cricstat.stat.Player1.getinfo
 
 import com.example.cricstat.stat.Player1.batting.scrapingData1
+import com.example.cricstat.stat.Player2.batting.OdiData2
+import com.example.cricstat.stat.Player2.batting.T20Data2
+import com.example.cricstat.stat.Player2.batting.TestData2
+import com.example.cricstat.stat.Player2.batting.scrapingData2
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun DisplayPlayerStats() {
-   /* var dataByYear by remember { mutableStateOf<List<String>?>(null) }
-    val deferredData = scrapingData1(text = "Virat Kohli")
-    LaunchedEffect(Unit) {
-        dataByYear = deferredData.await()
-    }*/
-    val dataByYear = remember {mutableStateOf<List<String>?>(null) }
-    val allYearData = remember { mutableStateOf<List<String>?>(null) }
-    val deferredData = scrapingData1(text = "Virat Kohli")
-    LaunchedEffect(Unit) {
-        val (fetchedPlayerYearbyData, fetchedAlltimeData) = deferredData.await()
-        dataByYear.value=fetchedPlayerYearbyData
-        allYearData.value=fetchedAlltimeData
-    }
+  Column {
 
-    val dataByYear2 = remember {mutableStateOf<List<String>?>(null) }
-    val allYearData2 = remember { mutableStateOf<List<String>?>(null) }
-    val deferredData2= TestData1(text = "Virat Kohli")
-    LaunchedEffect(Unit) {
-        val (fetchedPlayerYearbyData, fetchedAlltimeData) = deferredData2.await()
-        dataByYear2.value=fetchedPlayerYearbyData
-        allYearData2.value=fetchedAlltimeData
-    }
+      val dataByYear = remember { mutableStateOf<List<String>?>(null) }
+      val years1 = remember { mutableStateOf<List<String>?>(null) }
 
 
+      val dataByYear2 = remember { mutableStateOf<List<String>?>(null) }
+      val years2 = remember { mutableStateOf<List<String>?>(null) }
 
-    Card ( colors = CardDefaults.cardColors(
-        containerColor = MaterialTheme.colorScheme.surface
-    ),
-        shape = RoundedCornerShape(15.dp),
-        modifier = Modifier
-            .width(365.dp)
-            .fillMaxHeight()
-            .padding(start = 18.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)){
-        Box (modifier = Modifier
-            .fillMaxWidth()
+      val list = listOf("Test", "Odi", "T20I", "Ipl")
+      val defaultSelected = "Test"
+      val modifier = Modifier
+      val color = Color(0xFF8fcce3)
+
+      var selectedIndex by remember { mutableStateOf(list.indexOf(defaultSelected)) }
+      var expand by remember { mutableStateOf(false) }
+      var stroke by remember { mutableStateOf(1) }
+
+      val list1 = years1.value
+      // val size=years1?.value?.size
+      val defaultSelected1 = "Years"
+      val modifier1 = Modifier
+      val color1 = Color(0xFF8fcce3)
+      var selectedIndex1 by remember { mutableStateOf(list1?.indexOf(defaultSelected1)) }
+      var expand1 by remember { mutableStateOf(false) }
+      var stroke1 by remember { mutableStateOf(1) }
+
+      val list2 = listOf("Test", "Odi", "T20I", "Ipl")
+      val defaultSelected2 = "Test"
+      var selectedIndex2 by remember { mutableStateOf(list.indexOf(defaultSelected)) }
+      var expand2 by remember { mutableStateOf(false) }
+      var stroke2 by remember { mutableStateOf(1) }
+
+      val list3 = years2.value
+      // val size=years1?.value?.size
+      val defaultSelected3 = "Years"
+      var selectedIndex3 by remember { mutableStateOf(list1?.indexOf(defaultSelected1)) }
+      var expand3 by remember { mutableStateOf(false) }
+      var stroke3 by remember { mutableStateOf(1) }
+Row {
+
+
+    Box(
+          modifier
+              .padding(start = 18.dp)
+              .width(70.dp)
+              .height(45.dp)
+              .border(
+                  border = BorderStroke(stroke.dp, color),
+                  shape = RoundedCornerShape(4.dp)
+              )
+              .clickable {
+                  expand = true
+                  stroke = if (expand) 2 else 1
+              },
+          contentAlignment = Alignment.Center
+      ) {
+
+          Text(
+              text = list[selectedIndex],
+              color = color,
+              fontSize = 12.sp,
+              fontWeight = FontWeight.SemiBold,
+              modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp)
+          )
+
+          DropdownMenu(
+              expanded = expand,
+              onDismissRequest = {
+                  expand = false
+                  stroke = if (expand) 2 else 1
+              },
+              properties = PopupProperties(
+                  focusable = false,
+                  dismissOnBackPress = true,
+                  dismissOnClickOutside = true,
+              ),
+              modifier = Modifier
+                  .background(Color(0xFF171825))
+                  .padding(2.dp)
+                  .fillMaxWidth(.4f)
+          ) {
+              list.forEachIndexed { index, item ->
+                  DropdownMenuItem(
+                      text = {
+                          Text(
+                              text = item,
+                              color = color,
+                              textAlign = TextAlign.Center,
+                              modifier = Modifier.fillMaxWidth()
+                          )
+                      },
+                      onClick = {
+                          selectedIndex = index
+                          expand = false
+                          stroke = if (expand) 2 else 1
+                          //onSelected(selectedIndex)
+                      }
+                  )
+              }
+          }
+
+      }
+    Spacer(modifier = Modifier.width(5.dp))
+    Box(
+            modifier
+                //.padding(start = 18.dp)
+                .width(70.dp)
+                .height(45.dp)
+                .border(
+                    border = BorderStroke(stroke1.dp, color),
+                    shape = RoundedCornerShape(4.dp)
+                )
+                .clickable {
+                    expand1 = true
+                    stroke1 = if (expand1) 2 else 1
+                },
+            contentAlignment = Alignment.Center
+        ) {
+
+
+            (selectedIndex1?.let { list1?.get(it) } ?: null)?.let {
+                Text(
+                    text = it,
+                    color = color,
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp)
+                )
+            }
+
+
+            DropdownMenu(
+                expanded = expand1,
+                onDismissRequest = {
+                    expand1 = false
+                    stroke1 = if (expand) 2 else 1
+                },
+                properties = PopupProperties(
+                    focusable = false,
+                    dismissOnBackPress = true,
+                    dismissOnClickOutside = true,
+                ),
+                modifier = Modifier
+                    .background(Color(0xFF171825))
+                    .padding(2.dp)
+                    .fillMaxWidth(.4f)
+            ) {
+                list1?.forEachIndexed { index1, item1 ->
+                    DropdownMenuItem(
+                        text = {
+                            Text(
+                                text = item1,
+                                color = color,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        },
+                        onClick = {
+                            selectedIndex1 = index1
+                            expand1 = false
+                            stroke1 = if (expand) 2 else 1
+                            //onSelected(selectedIndex)
+                        }
+                    )
+                }
+            }
+
+        }
+        Spacer(modifier = Modifier.width(56.dp))
+    Box(
+            modifier
+                //.padding(start = 18.dp)
+                .width(70.dp)
+                .height(45.dp)
+                .border(
+                    border = BorderStroke(stroke2.dp, color),
+                    shape = RoundedCornerShape(4.dp)
+                )
+                .clickable {
+                    expand2 = true
+                    stroke2 = if (expand) 2 else 1
+                },
+            contentAlignment = Alignment.Center
+        ) {
+
+            Text(
+                text = list2[selectedIndex2],
+                color = color,
+                fontSize = 12.sp,
+                fontWeight = FontWeight.SemiBold,
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp)
+            )
+
+            DropdownMenu(
+                expanded = expand2,
+                onDismissRequest = {
+                    expand2 = false
+                    stroke2 = if (expand) 2 else 1
+                },
+                properties = PopupProperties(
+                    focusable = false,
+                    dismissOnBackPress = true,
+                    dismissOnClickOutside = true,
+                ),
+                modifier = Modifier
+                    .background(Color(0xFF171825))
+                    .padding(2.dp)
+                    .fillMaxWidth(.4f)
+            ) {
+                list2.forEachIndexed { index2, item2 ->
+                    DropdownMenuItem(
+                        text = {
+                            Text(
+                                text = item2,
+                                color = color,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        },
+                        onClick = {
+                            selectedIndex2 = index2
+                            expand2 = false
+                            stroke2 = if (expand2) 2 else 1
+                            //onSelected(selectedIndex)
+                        }
+                    )
+                }
+            }
+
+        }
+    Spacer(modifier = Modifier.width(5.dp))
+    Box(
+        modifier
+            //.padding(start = 18.dp)
+            .width(70.dp)
             .height(45.dp)
-            ){
-            BattingAndBowlingButtons()
+            .border(
+                border = BorderStroke(stroke3.dp, color),
+                shape = RoundedCornerShape(4.dp)
+            )
+            .clickable {
+                expand3 = true
+                stroke3 = if (expand3) 2 else 1
+            },
+        contentAlignment = Alignment.Center
+    ) {
 
+
+        (selectedIndex3?.let { list3?.get(it) } ?: null)?.let {
+            Text(
+                text = it,
+                color = color,
+                fontSize = 12.sp,
+                fontWeight = FontWeight.SemiBold,
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp)
+            )
         }
-        Box (modifier = Modifier
-            .fillMaxWidth()
-            .height(60.dp)
-            .background(Color(0xFF22212f))){
-            Row(modifier = Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically,) {
-                (allYearData.value?.get(1) ?: null)?.let { Text(text = it, color = Color.White
-                ,style = TextStyle(fontSize = 17.sp), modifier = Modifier.padding(start=15.dp)
-                ) }
-                Spacer(modifier = Modifier.weight(1f))
-                Text(text = "Innings", color = Color.White
-                    ,style = TextStyle(fontSize = 17.sp))
-                Spacer(modifier = Modifier.weight(1f))
-                //Spacer(modifier = Modifier.width(102.dp))
-                (dataByYear2.value?.get(1) ?: null)?.let { Text(text = it, color = Color.White
-                    ,style = TextStyle(fontSize = 17.sp), modifier = Modifier.padding(end=15.dp)
-                ) }
 
+
+        DropdownMenu(
+            expanded = expand3,
+            onDismissRequest = {
+                expand3 = false
+                stroke3 = if (expand3) 2 else 1
+            },
+            properties = PopupProperties(
+                focusable = false,
+                dismissOnBackPress = true,
+                dismissOnClickOutside = true,
+            ),
+            modifier = Modifier
+                .background(Color(0xFF171825))
+                .padding(2.dp)
+                .fillMaxWidth(.4f)
+        ) {
+            list3?.forEachIndexed { index3, item3 ->
+                DropdownMenuItem(
+                    text = {
+                        Text(
+                            text = item3,
+                            color = color,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    },
+                    onClick = {
+                        selectedIndex3 = index3
+                        expand3= false
+                        stroke3 = if (expand3) 2 else 1
+                        //onSelected(selectedIndex)
+                    }
+                )
             }
         }
 
-        Box (modifier = Modifier
-            .fillMaxWidth()
-            .height(60.dp)
-            .background(Color(0xFF383743))){
-            Row(modifier = Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically) {
-                (allYearData.value?.get(2) ?: null)?.let { Text(text = it, color = Color.White
-                    ,style = TextStyle(fontSize = 17.sp), modifier = Modifier.padding(start=15.dp)
-                ) }
-                Spacer(modifier = Modifier.weight(1f))
-                Text(text = "Runs", color = Color.White
-                    ,style = TextStyle(fontSize = 17.sp))
-                Spacer(modifier = Modifier.weight(1f))
-                (dataByYear2.value?.get(2) ?: null)?.let { Text(text = it, color = Color.White
-                    ,style = TextStyle(fontSize = 17.sp), modifier = Modifier.padding(end=15.dp)
-                ) }
+    }}
 
+        if (selectedIndex == 0) {
+
+            LaunchedEffect(selectedIndex1) {
+                val deferredData = TestData1(text = "Virat Kohli", index = selectedIndex1 ?: 0)
+                val (fetchedPlayerYearbyData, fetchedAlltimeData) = deferredData.await()
+                dataByYear.value = fetchedPlayerYearbyData
+                years1.value = fetchedAlltimeData
+            }
+        } else if (selectedIndex == 1) {
+
+            LaunchedEffect(selectedIndex1) {
+                val deferredData = OdiData1(text = "Virat Kohli", selectedIndex1 ?: 0)
+                val (fetchedPlayerYearbyData, fetchedAlltimeData) = deferredData.await()
+                dataByYear.value = fetchedPlayerYearbyData
+                years1.value = fetchedAlltimeData
+            }
+        } else if (selectedIndex == 2) {
+
+            LaunchedEffect(selectedIndex1) {
+                val deferredData = T20Data1(text = "Virat Kohli", selectedIndex1 ?: 0)
+                val (fetchedPlayerYearbyData, fetchedAlltimeData) = deferredData.await()
+                dataByYear.value = fetchedPlayerYearbyData
+                years1.value = fetchedAlltimeData
+            }
+        } else if (selectedIndex == 3) {
+
+            LaunchedEffect(selectedIndex1) {
+                val deferredData = scrapingData1(text = "Virat Kohli", selectedIndex1 ?: 0)
+                val (fetchedPlayerYearbyData, fetchedAlltimeData) = deferredData.await()
+                dataByYear.value = fetchedPlayerYearbyData
+                years1.value = fetchedAlltimeData
             }
         }
 
-        Box (modifier = Modifier
-            .fillMaxWidth()
-            .height(60.dp)
-            .background(Color(0xFF22212f))){
-            Row(modifier = Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically) {
-                (dataByYear.value?.get(3) ?: null)?.let { Text(text = it, color = Color.White
-                    ,style = TextStyle(fontSize = 17.sp), modifier = Modifier.padding(start=15.dp)
-                ) }
-                Spacer(modifier = Modifier.weight(1f))
-                Text(text = "Balls", color = Color.White
-                    ,style = TextStyle(fontSize = 17.sp))
-                Spacer(modifier = Modifier.weight(1f))
-                (dataByYear2.value?.get(3) ?: null)?.let { Text(text = it, color = Color.White
-                    ,style = TextStyle(fontSize = 17.sp), modifier = Modifier.padding(end=15.dp)
-                ) }
+      if (selectedIndex2 == 0) {
 
-            }
+          LaunchedEffect(selectedIndex3) {
+              val deferredData2 = TestData2(text = "Sachin Tendulkar", index2 = selectedIndex3 ?: 0)
+              val (fetchedPlayerYearbyData, fetchedAlltimeData) = deferredData2.await()
+              dataByYear2.value = fetchedPlayerYearbyData
+              years2.value = fetchedAlltimeData
+          }
+      } else if (selectedIndex2 == 1) {
+
+          LaunchedEffect(selectedIndex3) {
+              val deferredData2 = OdiData2(text = "Sachin Tendulkar", selectedIndex3 ?: 0)
+              val (fetchedPlayerYearbyData, fetchedAlltimeData) = deferredData2.await()
+              dataByYear2.value = fetchedPlayerYearbyData
+              years2.value = fetchedAlltimeData
+          }
+      } else if (selectedIndex2 == 2) {
+
+          LaunchedEffect(selectedIndex3) {
+              val deferredData2 = T20Data2(text = "Sachin Tendulkar", selectedIndex3 ?: 0)
+              val (fetchedPlayerYearbyData, fetchedAlltimeData) = deferredData2.await()
+              dataByYear2.value = fetchedPlayerYearbyData
+              years2.value = fetchedAlltimeData
+          }
+      } else if (selectedIndex2 == 3) {
+
+          LaunchedEffect(selectedIndex3) {
+              val deferredData2 = scrapingData2(text = "Sachin Tendulkar", selectedIndex3 ?: 0)
+              val (fetchedPlayerYearbyData, fetchedAlltimeData) = deferredData2.await()
+              dataByYear2.value = fetchedPlayerYearbyData
+              years2.value = fetchedAlltimeData
+          }
+      }
+
+
+
+
+      Spacer(modifier = Modifier.height(30.dp))
+
+      Card(
+          colors = CardDefaults.cardColors(
+              containerColor = MaterialTheme.colorScheme.surface
+          ),
+          shape = RoundedCornerShape(15.dp),
+          modifier = Modifier
+              .width(365.dp)
+              .fillMaxHeight()
+              .padding(start = 18.dp),
+          elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
+      ) {
+          Box(
+              modifier = Modifier
+                  .fillMaxWidth()
+                  .height(45.dp)
+          ) {
+              BattingAndBowlingButtons()
+
+          }
+          Box(
+              modifier = Modifier
+                  .fillMaxWidth()
+                  .height(60.dp)
+                  .background(Color(0xFF22212f))
+          ) {
+              Row(
+                  modifier = Modifier.fillMaxSize(),
+                  verticalAlignment = Alignment.CenterVertically,
+              ) {
+                  (dataByYear.value?.get(1) ?: null)?.let {
+                      Text(
+                          text = it,
+                          color = Color.White,
+                          style = TextStyle(fontSize = 17.sp),
+                          modifier = Modifier.padding(start = 15.dp)
+                      )
+                  }
+                  Spacer(modifier = Modifier.weight(1f))
+                  Text(
+                      text = "Innings", color = Color.White, style = TextStyle(fontSize = 17.sp)
+                  )
+                  Spacer(modifier = Modifier.weight(1f))
+                  //Spacer(modifier = Modifier.width(102.dp))
+                  (dataByYear2.value?.get(1) ?: null)?.let {
+                      Text(
+                          text = it,
+                          color = Color.White,
+                          style = TextStyle(fontSize = 17.sp),
+                          modifier = Modifier.padding(end = 15.dp)
+                      )
+                  }
+
+              }
+          }
+
+          Box(
+              modifier = Modifier
+                  .fillMaxWidth()
+                  .height(60.dp)
+                  .background(Color(0xFF383743))
+          ) {
+              Row(
+                  modifier = Modifier.fillMaxSize(),
+                  verticalAlignment = Alignment.CenterVertically
+              ) {
+                  (dataByYear.value?.get(2) ?: null)?.let {
+                      Text(
+                          text = it,
+                          color = Color.White,
+                          style = TextStyle(fontSize = 17.sp),
+                          modifier = Modifier.padding(start = 15.dp)
+                      )
+                  }
+                  Spacer(modifier = Modifier.weight(1f))
+                  Text(
+                      text = "Runs", color = Color.White, style = TextStyle(fontSize = 17.sp)
+                  )
+                  Spacer(modifier = Modifier.weight(1f))
+                  (dataByYear2.value?.get(2) ?: null)?.let {
+                      Text(
+                          text = it,
+                          color = Color.White,
+                          style = TextStyle(fontSize = 17.sp),
+                          modifier = Modifier.padding(end = 15.dp)
+                      )
+                  }
+
+              }
+          }
+
+          Box(
+              modifier = Modifier
+                  .fillMaxWidth()
+                  .height(60.dp)
+                  .background(Color(0xFF22212f))
+          ) {
+              Row(
+                  modifier = Modifier.fillMaxSize(),
+                  verticalAlignment = Alignment.CenterVertically
+              ) {
+                  (dataByYear.value?.get(3) ?: null)?.let {
+                      Text(
+                          text = it,
+                          color = Color.White,
+                          style = TextStyle(fontSize = 17.sp),
+                          modifier = Modifier.padding(start = 15.dp)
+                      )
+                  }
+                  Spacer(modifier = Modifier.weight(1f))
+                  Text(
+                      text = "Balls", color = Color.White, style = TextStyle(fontSize = 17.sp)
+                  )
+                  Spacer(modifier = Modifier.weight(1f))
+                  (dataByYear2.value?.get(3) ?: null)?.let {
+                      Text(
+                          text = it,
+                          color = Color.White,
+                          style = TextStyle(fontSize = 17.sp),
+                          modifier = Modifier.padding(end = 15.dp)
+                      )
+                  }
+
+              }
+          }
+
+          Box(
+              modifier = Modifier
+                  .fillMaxWidth()
+                  .height(60.dp)
+                  .background(Color(0xFF383743))
+          ) {
+              Row(
+                  modifier = Modifier.fillMaxSize(),
+                  verticalAlignment = Alignment.CenterVertically
+              ) {
+                  (dataByYear.value?.get(4) ?: null)?.let {
+                      Text(
+                          text = it,
+                          color = Color.White,
+                          style = TextStyle(fontSize = 17.sp),
+                          modifier = Modifier.padding(start = 15.dp)
+                      )
+                  }
+                  Spacer(modifier = Modifier.weight(1f))
+                  Text(
+                      text = "Outs", color = Color.White, style = TextStyle(fontSize = 17.sp)
+                  )
+                  Spacer(modifier = Modifier.weight(1f))
+                  (dataByYear2.value?.get(4) ?: null)?.let {
+                      Text(
+                          text = it,
+                          color = Color.White,
+                          style = TextStyle(fontSize = 17.sp),
+                          modifier = Modifier.padding(end = 15.dp)
+                      )
+                  }
+
+              }
+          }
+
+          Box(
+              modifier = Modifier
+                  .fillMaxWidth()
+                  .height(60.dp)
+                  .background(Color(0xFF22212f))
+          ) {
+              Row(
+                  modifier = Modifier.fillMaxSize(),
+                  verticalAlignment = Alignment.CenterVertically
+              ) {
+                  (dataByYear.value?.get(5) ?: null)?.let {
+                      Text(
+                          text = it,
+                          color = Color.White,
+                          style = TextStyle(fontSize = 17.sp),
+                          modifier = Modifier.padding(start = 15.dp)
+                      )
+                  }
+                  Spacer(modifier = Modifier.weight(1f))
+                  Text(
+                      text = "Average", color = Color.White, style = TextStyle(fontSize = 17.sp)
+                  )
+                  Spacer(modifier = Modifier.weight(1f))
+                  (dataByYear2.value?.get(5) ?: null)?.let {
+                      Text(
+                          text = it,
+                          color = Color.White,
+                          style = TextStyle(fontSize = 17.sp),
+                          modifier = Modifier.padding(end = 15.dp)
+                      )
+                  }
+
+              }
+          }
+
+          Box(
+              modifier = Modifier
+                  .fillMaxWidth()
+                  .height(60.dp)
+                  .background(Color(0xFF383743))
+          ) {
+              Row(
+                  modifier = Modifier.fillMaxSize(),
+                  verticalAlignment = Alignment.CenterVertically
+              ) {
+                  (dataByYear.value?.get(6) ?: null)?.let {
+                      Text(
+                          text = it,
+                          color = Color.White,
+                          style = TextStyle(fontSize = 17.sp),
+                          modifier = Modifier.padding(start = 15.dp)
+                      )
+                  }
+                  Spacer(modifier = Modifier.weight(1f))
+                  Text(
+                      text = "StrikeRate", color = Color.White, style = TextStyle(fontSize = 17.sp)
+                  )
+                  Spacer(modifier = Modifier.weight(1f))
+                  (dataByYear2.value?.get(6) ?: null)?.let {
+                      Text(
+                          text = it,
+                          color = Color.White,
+                          style = TextStyle(fontSize = 17.sp),
+                          modifier = Modifier.padding(end = 15.dp)
+                      )
+                  }
+
+              }
+          }
+
+          Box(
+              modifier = Modifier
+                  .fillMaxWidth()
+                  .height(60.dp)
+                  .background(Color(0xFF22212f))
+          ) {
+              Row(
+                  modifier = Modifier.fillMaxSize(),
+                  verticalAlignment = Alignment.CenterVertically
+              ) {
+                  (dataByYear.value?.get(7) ?: null)?.let {
+                      Text(
+                          text = it,
+                          color = Color.White,
+                          style = TextStyle(fontSize = 17.sp),
+                          modifier = Modifier.padding(start = 15.dp)
+                      )
+                  }
+                  Spacer(modifier = Modifier.weight(1f))
+                  Text(
+                      text = "HighScore", color = Color.White, style = TextStyle(fontSize = 17.sp)
+                  )
+                  Spacer(modifier = Modifier.weight(1f))
+                  (dataByYear2.value?.get(7) ?: null)?.let {
+                      Text(
+                          text = it,
+                          color = Color.White,
+                          style = TextStyle(fontSize = 17.sp),
+                          modifier = Modifier.padding(end = 15.dp)
+                      )
+                  }
+
+              }
+          }
+
+          Box(
+              modifier = Modifier
+                  .fillMaxWidth()
+                  .height(60.dp)
+                  .background(Color(0xFF383743))
+          ) {
+              Row(
+                  modifier = Modifier.fillMaxSize(),
+                  verticalAlignment = Alignment.CenterVertically
+              ) {
+                  (dataByYear.value?.get(8) ?: null)?.let {
+                      Text(
+                          text = it,
+                          color = Color.White,
+                          style = TextStyle(fontSize = 17.sp),
+                          modifier = Modifier.padding(start = 15.dp)
+                      )
+                  }
+                  Spacer(modifier = Modifier.weight(1f))
+                  Text(
+                      text = "50s", color = Color.White, style = TextStyle(fontSize = 17.sp)
+                  )
+                  Spacer(modifier = Modifier.weight(1f))
+                  (dataByYear2.value?.get(8) ?: null)?.let {
+                      Text(
+                          text = it,
+                          color = Color.White,
+                          style = TextStyle(fontSize = 17.sp),
+                          modifier = Modifier.padding(end = 15.dp)
+                      )
+                  }
+
+              }
+          }
+
+          Box(
+              modifier = Modifier
+                  .fillMaxWidth()
+                  .height(60.dp)
+                  .background(Color(0xFF22212f))
+          ) {
+              Row(
+                  modifier = Modifier.fillMaxSize(),
+                  verticalAlignment = Alignment.CenterVertically
+              ) {
+                  (dataByYear.value?.get(9) ?: null)?.let {
+                      Text(
+                          text = it,
+                          color = Color.White,
+                          style = TextStyle(fontSize = 17.sp),
+                          modifier = Modifier.padding(start = 15.dp)
+                      )
+                  }
+                  Spacer(modifier = Modifier.weight(1f))
+                  Text(
+                      text = "100s", color = Color.White, style = TextStyle(fontSize = 17.sp)
+                  )
+                  Spacer(modifier = Modifier.weight(1f))
+                  (dataByYear2.value?.get(9) ?: null)?.let {
+                      Text(
+                          text = it,
+                          color = Color.White,
+                          style = TextStyle(fontSize = 17.sp),
+                          modifier = Modifier.padding(end = 15.dp)
+                      )
+                  }
+
+              }
+          }
+
+          Box(
+              modifier = Modifier
+                  .fillMaxWidth()
+                  .height(60.dp)
+                  .background(Color(0xFF383743))
+          ) {
+              Row(
+                  modifier = Modifier.fillMaxSize(),
+                  verticalAlignment = Alignment.CenterVertically
+              ) {
+                  (dataByYear.value?.get(10) ?: null)?.let {
+                      Text(
+                          text = it,
+                          color = Color.White,
+                          style = TextStyle(fontSize = 17.sp),
+                          modifier = Modifier.padding(start = 15.dp)
+                      )
+                  }
+                  Spacer(modifier = Modifier.weight(1f))
+                  Text(
+                      text = "Fours", color = Color.White, style = TextStyle(fontSize = 17.sp)
+                  )
+                  Spacer(modifier = Modifier.weight(1f))
+                  (dataByYear2.value?.get(10) ?: null)?.let {
+                      Text(
+                          text = it,
+                          color = Color.White,
+                          style = TextStyle(fontSize = 17.sp),
+                          modifier = Modifier.padding(end = 15.dp)
+                      )
+                  }
+
+              }
+          }
+
+          Box(
+              modifier = Modifier
+                  .fillMaxWidth()
+                  .height(60.dp)
+                  .background(Color(0xFF22212f))
+          ) {
+              Row(
+                  modifier = Modifier.fillMaxSize(),
+                  verticalAlignment = Alignment.CenterVertically
+              ) {
+                  (dataByYear.value?.get(11) ?: null)?.let {
+                      Text(
+                          text = it,
+                          color = Color.White,
+                          style = TextStyle(fontSize = 17.sp),
+                          modifier = Modifier.padding(start = 15.dp)
+                      )
+                  }
+                  Spacer(modifier = Modifier.weight(1f))
+                  Text(
+                      text = "Sixes", color = Color.White, style = TextStyle(fontSize = 17.sp)
+                  )
+                  Spacer(modifier = Modifier.weight(1f))
+                  (dataByYear2.value?.get(11) ?: null)?.let {
+                      Text(
+                          text = it,
+                          color = Color.White,
+                          style = TextStyle(fontSize = 17.sp),
+                          modifier = Modifier.padding(end = 15.dp)
+                      )
+                  }
+
+              }
+          }
+
+          Box(
+              modifier = Modifier
+                  .fillMaxWidth()
+                  .height(60.dp)
+                  .background(Color(0xFF383743))
+          ) {
+              Row(
+                  modifier = Modifier.fillMaxSize(),
+                  verticalAlignment = Alignment.CenterVertically
+              ) {
+                  (dataByYear.value?.get(12) ?: null)?.let {
+                      Text(
+                          text = it,
+                          color = Color.White,
+                          style = TextStyle(fontSize = 17.sp),
+                          modifier = Modifier.padding(start = 15.dp)
+                      )
+                  }
+                  Spacer(modifier = Modifier.weight(1f))
+                  Text(
+                      text = "Dot%", color = Color.White, style = TextStyle(fontSize = 17.sp)
+                  )
+                  Spacer(modifier = Modifier.weight(1f))
+                  (dataByYear2.value?.get(12) ?: null)?.let {
+                      Text(
+                          text = it,
+                          color = Color.White,
+                          style = TextStyle(fontSize = 17.sp),
+                          modifier = Modifier.padding(end = 15.dp)
+                      )
+                  }
+
+              }
+          }
+
+
+      }
+  }
         }
 
-        Box (modifier = Modifier
-            .fillMaxWidth()
-            .height(60.dp)
-            .background(Color(0xFF383743))){
-            Row(modifier = Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically) {
-                (dataByYear.value?.get(4) ?: null)?.let { Text(text = it, color = Color.White
-                    ,style = TextStyle(fontSize = 17.sp), modifier = Modifier.padding(start=15.dp)
-                ) }
-                Spacer(modifier = Modifier.weight(1f))
-                Text(text = "Outs", color = Color.White
-                    ,style = TextStyle(fontSize = 17.sp))
-                Spacer(modifier = Modifier.weight(1f))
-                (dataByYear2.value?.get(4) ?: null)?.let { Text(text = it, color = Color.White
-                    ,style = TextStyle(fontSize = 17.sp), modifier = Modifier.padding(end=15.dp)
-                ) }
 
-            }
-        }
-
-        Box (modifier = Modifier
-            .fillMaxWidth()
-            .height(60.dp)
-            .background(Color(0xFF22212f))){
-            Row(modifier = Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically) {
-                (dataByYear.value?.get(5) ?: null)?.let { Text(text = it, color = Color.White
-                    ,style = TextStyle(fontSize = 17.sp), modifier = Modifier.padding(start=15.dp)
-                ) }
-                Spacer(modifier = Modifier.weight(1f))
-                Text(text = "Average", color = Color.White
-                    ,style = TextStyle(fontSize = 17.sp))
-                Spacer(modifier = Modifier.weight(1f))
-                (dataByYear2.value?.get(5) ?: null)?.let { Text(text = it, color = Color.White
-                    ,style = TextStyle(fontSize = 17.sp), modifier = Modifier.padding(end=15.dp)
-                ) }
-
-            }
-        }
-
-        Box (modifier = Modifier
-            .fillMaxWidth()
-            .height(60.dp)
-            .background(Color(0xFF383743))){
-            Row(modifier = Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically) {
-                (dataByYear.value?.get(6) ?: null)?.let { Text(text = it, color = Color.White
-                    ,style = TextStyle(fontSize = 17.sp), modifier = Modifier.padding(start=15.dp)
-                ) }
-                Spacer(modifier = Modifier.weight(1f))
-                Text(text = "StrikeRate", color = Color.White
-                    ,style = TextStyle(fontSize = 17.sp))
-                Spacer(modifier = Modifier.weight(1f))
-                (dataByYear2.value?.get(6) ?: null)?.let { Text(text = it, color = Color.White
-                    ,style = TextStyle(fontSize = 17.sp), modifier = Modifier.padding(end=15.dp)
-                ) }
-
-            }
-        }
-
-        Box (modifier = Modifier
-            .fillMaxWidth()
-            .height(60.dp)
-            .background(Color(0xFF22212f))){
-            Row(modifier = Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically) {
-                (dataByYear.value?.get(7) ?: null)?.let { Text(text = it, color = Color.White
-                    ,style = TextStyle(fontSize = 17.sp), modifier = Modifier.padding(start=15.dp)
-                ) }
-                Spacer(modifier = Modifier.weight(1f))
-                Text(text = "HighScore", color = Color.White
-                    ,style = TextStyle(fontSize = 17.sp))
-                Spacer(modifier = Modifier.weight(1f))
-                (dataByYear2.value?.get(7) ?: null)?.let { Text(text = it, color = Color.White
-                    ,style = TextStyle(fontSize = 17.sp), modifier = Modifier.padding(end=15.dp)
-                ) }
-
-            }
-        }
-
-        Box (modifier = Modifier
-            .fillMaxWidth()
-            .height(60.dp)
-            .background(Color(0xFF383743))){
-            Row(modifier = Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically) {
-                (dataByYear.value?.get(8) ?: null)?.let { Text(text = it, color = Color.White
-                    ,style = TextStyle(fontSize = 17.sp), modifier = Modifier.padding(start=15.dp)
-                ) }
-                Spacer(modifier = Modifier.weight(1f))
-                Text(text = "50s", color = Color.White
-                    ,style = TextStyle(fontSize = 17.sp))
-                Spacer(modifier = Modifier.weight(1f))
-                (dataByYear2.value?.get(8) ?: null)?.let { Text(text = it, color = Color.White
-                    ,style = TextStyle(fontSize = 17.sp), modifier = Modifier.padding(end=15.dp)
-                ) }
-
-            }
-        }
-
-        Box (modifier = Modifier
-            .fillMaxWidth()
-            .height(60.dp)
-            .background(Color(0xFF22212f))){
-            Row(modifier = Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically) {
-                (dataByYear.value?.get(9) ?: null)?.let { Text(text = it, color = Color.White
-                    ,style = TextStyle(fontSize = 17.sp), modifier = Modifier.padding(start=15.dp)
-                ) }
-                Spacer(modifier = Modifier.weight(1f))
-                Text(text = "100s", color = Color.White
-                    ,style = TextStyle(fontSize = 17.sp))
-                Spacer(modifier = Modifier.weight(1f))
-                (dataByYear2.value?.get(9) ?: null)?.let { Text(text = it, color = Color.White
-                    ,style = TextStyle(fontSize = 17.sp), modifier = Modifier.padding(end=15.dp)
-                ) }
-
-            }
-        }
-
-        Box (modifier = Modifier
-            .fillMaxWidth()
-            .height(60.dp)
-            .background(Color(0xFF383743))){
-            Row(modifier = Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically) {
-                (dataByYear.value?.get(10) ?: null)?.let { Text(text = it, color = Color.White
-                    ,style = TextStyle(fontSize = 17.sp), modifier = Modifier.padding(start=15.dp)
-                ) }
-                Spacer(modifier = Modifier.weight(1f))
-                Text(text = "Fours", color = Color.White
-                    ,style = TextStyle(fontSize = 17.sp))
-                Spacer(modifier = Modifier.weight(1f))
-                (dataByYear2.value?.get(10) ?: null)?.let { Text(text = it, color = Color.White
-                    ,style = TextStyle(fontSize = 17.sp), modifier = Modifier.padding(end=15.dp)
-                ) }
-
-            }
-        }
-
-        Box (modifier = Modifier
-            .fillMaxWidth()
-            .height(60.dp)
-            .background(Color(0xFF22212f))){
-            Row(modifier = Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically) {
-                (dataByYear.value?.get(11) ?: null)?.let { Text(text = it, color = Color.White
-                    ,style = TextStyle(fontSize = 17.sp), modifier = Modifier.padding(start=15.dp)
-                ) }
-                Spacer(modifier = Modifier.weight(1f))
-                Text(text = "Sixes", color = Color.White
-                    ,style = TextStyle(fontSize = 17.sp))
-                Spacer(modifier = Modifier.weight(1f))
-                (dataByYear2.value?.get(11) ?: null)?.let { Text(text = it, color = Color.White
-                    ,style = TextStyle(fontSize = 17.sp), modifier = Modifier.padding(end=15.dp)
-                ) }
-
-            }
-        }
-
-        Box (modifier = Modifier
-            .fillMaxWidth()
-            .height(60.dp)
-            .background(Color(0xFF383743))){
-            Row(modifier = Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically) {
-                (dataByYear.value?.get(12) ?: null)?.let { Text(text = it, color = Color.White
-                    ,style = TextStyle(fontSize = 17.sp), modifier = Modifier.padding(start=15.dp)
-                ) }
-                Spacer(modifier = Modifier.weight(1f))
-                Text(text = "Dot%", color = Color.White
-                    ,style = TextStyle(fontSize = 17.sp))
-                Spacer(modifier = Modifier.weight(1f))
-                (dataByYear2.value?.get(12) ?: null)?.let { Text(text = it, color = Color.White
-                    ,style = TextStyle(fontSize = 17.sp), modifier = Modifier.padding(end=15.dp)
-                ) }
-
-            }
-        }
-
-
-
-    }
-
-        }
 
 
 
@@ -372,7 +920,10 @@ fun DisplayBoxWithLabel(data: String?, label: String) {
 fun PlayerHeader(name:String){
     OutlinedCard (colors = CardDefaults.cardColors(
         containerColor = Color(0xFF22212f),
+contentColor = Color(0xFF8fcce3)
     ),
+
+
         shape = RoundedCornerShape(20.dp),
         modifier = Modifier
             .width(130.dp)
@@ -444,7 +995,9 @@ fun BattingAndBowlingButtons() {
             onClick = { setSelectedButton("batting") },
             colors = if (selectedButton == "batting") ButtonDefaults.buttonColors(Color(0xFF8fcce3)) else ButtonDefaults.buttonColors(Color(0xFF22212f)),
             shape = RoundedCornerShape(topStart = 15.dp),
-            modifier = Modifier.width(170.dp).height(45.dp)
+            modifier = Modifier
+                .width(170.dp)
+                .height(45.dp)
         ) {
             if (selectedButton == "batting")
                 Text(text = "Batting", color = Color.Black)
@@ -456,7 +1009,9 @@ fun BattingAndBowlingButtons() {
             onClick = { setSelectedButton("Bowling") },
             colors = if (selectedButton == "Bowling") ButtonDefaults.buttonColors(Color(0xFF8fcce3)) else ButtonDefaults.buttonColors(Color(0xFF22212f)),
             shape = RoundedCornerShape(topEnd = 15.dp),
-            modifier = Modifier.width(180.dp).height(45.dp)
+            modifier = Modifier
+                .width(180.dp)
+                .height(45.dp)
         ) {
             if (selectedButton == "Bowling")
                 Text(text = "Bowling", color = Color.Black)
@@ -483,7 +1038,9 @@ fun CustomDropdownMenu(
     var stroke by remember { mutableStateOf(1) }
     Box(
         modifier
-            .padding(8.dp).width(70.dp).height(45.dp)
+            .padding(8.dp)
+            .width(70.dp)
+            .height(45.dp)
             .border(
                 border = BorderStroke(stroke.dp, color),
                 shape = RoundedCornerShape(4.dp)
