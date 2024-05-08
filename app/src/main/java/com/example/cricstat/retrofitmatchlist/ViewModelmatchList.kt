@@ -27,21 +27,17 @@ class ViewModelmatchList  (private val repository: Repository1):ViewModel(){
     private val _recentMatches = MutableLiveData<com.example.cricstat.retrofitmatchlist.dataclass.matchList>()
     val recentMatches: LiveData<com.example.cricstat.retrofitmatchlist.dataclass.matchList> get() = _recentMatches
 
-    /*private val _imageBytes = MutableLiveData<ByteArray?>()
-    val imageBytes: MutableLiveData<ByteArray?> get() = _imageBytes*/
 
-    private val _imageBitmap = MutableLiveData<Bitmap>()
-    val imageBitmap: LiveData<Bitmap> get() = _imageBitmap
 
-    private val _error = MutableLiveData<String>()
-    val error: LiveData<String> get() = _error
+
 
 
     init {
-        fetchLiveMatches()
-        fetchUpcomingMatches()
-        fetchRecentMatches()
-
+        viewModelScope.launch {
+            fetchLiveMatches()
+            fetchUpcomingMatches()
+            fetchRecentMatches()
+        }
     }
 
     /*init {
@@ -54,18 +50,23 @@ class ViewModelmatchList  (private val repository: Repository1):ViewModel(){
         }
     }*/
 
-    private fun fetchLiveMatches() {
+    private suspend fun fetchLiveMatches() {
         viewModelScope.launch {
-            val response = repository.getLiveMatches()
-            if (response != null) {
-                if (response.isSuccessful) {
+            try {
+                val response = repository.getLiveMatches()
+                if (response != null && response.isSuccessful) {
                     _liveMatches.value = response.body()
+                    Log.d("Debug", "livematchviewmodel called - data fetched successfully")
+                } else {
+                    Log.d("Debug", "livematchviewmodel called - failed to fetch data (reason: ${response?.message()})")
                 }
+            } catch (e: Exception) {
+                Log.e("Debug", "livematchviewmodel called - error fetching data", e)
             }
         }
     }
 
-    private fun fetchUpcomingMatches() {
+    private suspend fun fetchUpcomingMatches() {
         viewModelScope.launch {
             val response = repository.getUpcomingMatches()
             if (response != null) {
@@ -76,7 +77,7 @@ class ViewModelmatchList  (private val repository: Repository1):ViewModel(){
         }
     }
 
-    private fun fetchRecentMatches() {
+    private suspend fun fetchRecentMatches() {
         viewModelScope.launch {
             val response = repository.getRecentMatches()
             if (response != null) {
@@ -87,36 +88,6 @@ class ViewModelmatchList  (private val repository: Repository1):ViewModel(){
         }
     }
 
-/*    fun fetchImage(imageId: String) {
-        viewModelScope.launch {
-            val response = repository.getImage(imageId)
-            if (response != null && response.isSuccessful) {
-                // Convert the ResponseBody to a byte array
-                val imageBytes = response.body()?.bytes()
-                _imageBytes.value = imageBytes
-            }
-        }
-    }*/
-
-  /*  fun fetchImage(imageId: String) {
-        viewModelScope.launch {
-            val response = repository.getImage(imageId)
-            if (response != null) {
-                if (response.isSuccessful) {
-                    // Convert the ResponseBody to a Bitmap
-                    val bitmap = BitmapFactory.decodeStream(response.body()?.byteStream())
-                    // Update LiveData with the Bitmap
-                    _imageBitmap.value = bitmap
-                } else {
-                    // Handle the error
-                    val errorBody = response.errorBody()?.string()
-                    Log.e("YourViewModel", "Error fetching image: $errorBody")
-                    // Update LiveData to reflect the error state
-                    _error.value = "Failed to fetch image"
-                }
-            }
-        }
-    }*/
 
 }
 

@@ -65,29 +65,6 @@ fun getLiveIntMatches(viewModel:ViewModelmatchList) {
     Log.d("Debug", "liveMatches: $liveMatches")
     //val imageBitmap by viewModel.imageBitmap.observeAsState(null)
 
-
-
-   /* liveMatches?.let { matchList ->
-        val allMatches = mutableListOf<Matche>()
-        for (typeMatche in matchList.typeMatches) {
-            for (seriesMatche in typeMatche.seriesMatches ?: emptyList()) {
-                seriesMatche.seriesAdWrapper?.matches?.let { matches ->
-                    allMatches.addAll(matches)
-                }
-            }
-        }*/
-    /*liveMatches?.let { matchList ->
-        val filteredMatches = mutableListOf<Matche>()
-        for (typeMatch in matchList.typeMatches) {
-            for (seriesMatch in typeMatch.seriesMatches ?: emptyList()) {
-                seriesMatch.seriesAdWrapper?.matches?.let { matches ->
-                    filteredMatches.addAll(
-                        matches.filter {
-                            typeMatch.matchType== "International" //&& seriesMatch.seriesAdWrapper.seriesName != "Canada tour of USA, 2024"
-                        }
-                    )
-                }
-            }*/
     liveMatches?.let { matchList ->
         val filteredMatches = mutableListOf<Matche>()
         for (typeMatch in matchList.typeMatches) {
@@ -249,7 +226,7 @@ fun liveScoreCard(match:Matche) {
                         style = TextStyle(fontSize = 16.sp),
                         fontWeight = FontWeight.W500)
                     Spacer(modifier = Modifier.width(15.dp))
-                    if(match.matchScore.team1Score!=null){
+                    if(match.matchScore?.team1Score!=null){
                         Text(text = "${match.matchScore?.team1Score?.inngs1?.runs}-${match.matchScore?.team1Score?.inngs1?.wickets}", color = Color(0xFF6eb5ee),style = TextStyle(fontSize = 20.sp), fontWeight = FontWeight.Bold)
                         Spacer(modifier = Modifier.width(5.dp))
                         Text(text = "(${match.matchScore?.team1Score?.inngs1?.overs})",color = Color(0xFFffffff),style = TextStyle(fontSize = 11.5.sp))
@@ -278,7 +255,7 @@ fun liveScoreCard(match:Matche) {
                         style = TextStyle(fontSize = 16.sp),
                         fontWeight = FontWeight.W500)
                     Spacer(modifier = Modifier.width(15.dp))
-                    if(match.matchScore.team2Score!=null){
+                    if(match.matchScore?.team2Score!=null){
                         Text(text = "${match.matchScore?.team2Score?.inngs1?.runs}-${match.matchScore?.team2Score?.inngs1?.wickets}", color = Color(0xFF6eb5ee),style = TextStyle(fontSize = 20.sp), fontWeight = FontWeight.Bold)
                         Spacer(modifier = Modifier.width(5.dp))
                         Text(text = "(${match.matchScore?.team2Score?.inngs1?.overs})",color = Color(0xFFffffff),style = TextStyle(fontSize = 11.5.sp))
@@ -395,7 +372,7 @@ fun liveLegDomScoreCard(match:Matche) {
                             fontWeight = FontWeight.W500,
                         )
                         Spacer(modifier = Modifier.width(15.dp))
-                        if(match.matchScore.team1Score!=null){
+                        if(match.matchScore?.team1Score!=null){
                             Text(text = "${match.matchScore?.team1Score.inngs1?.runs}-${match.matchScore?.team1Score.inngs1?.wickets}", color = Color(0xFF6eb5ee),style = TextStyle(fontSize = 20.sp), fontWeight = FontWeight.Bold)
                             Spacer(modifier = Modifier.width(5.dp))
                             Text(text = "(${match.matchScore?.team1Score.inngs1?.overs})",color = Color(0xFFffffff),style = TextStyle(fontSize = 11.5.sp))
@@ -414,7 +391,7 @@ fun liveLegDomScoreCard(match:Matche) {
                             modifier = Modifier
                                 .padding(start = 15.dp))
                         Spacer(modifier = Modifier.width(15.dp))
-                        if(match.matchScore.team1Score!=null){
+                        if(match.matchScore?.team1Score!=null){
                             Text(text = "${match.matchScore?.team1Score?.inngs1?.runs}-${match.matchScore?.team1Score?.inngs1?.wickets}", color = Color(0xFF6eb5ee),style = TextStyle(fontSize = 20.sp), fontWeight = FontWeight.Bold)
                             Spacer(modifier = Modifier.width(5.dp))
                             Text(text = "(${match.matchScore?.team1Score?.inngs1?.overs})",color = Color(0xFFffffff),style = TextStyle(fontSize = 11.5.sp))
@@ -445,7 +422,7 @@ fun liveLegDomScoreCard(match:Matche) {
                             fontWeight = FontWeight.W500,
                         )
                         Spacer(modifier = Modifier.width(15.dp))
-                        if(match.matchScore.team1Score!=null){
+                        if(match.matchScore?.team1Score!=null){
                             Text(text = "${match.matchScore?.team2Score?.inngs1?.runs}-${match.matchScore?.team2Score?.inngs1?.wickets}", color = Color(0xFF6eb5ee),style = TextStyle(fontSize = 20.sp), fontWeight = FontWeight.Bold)
                             Spacer(modifier = Modifier.width(5.dp))
                             Text(text = "(${match.matchScore?.team2Score?.inngs1?.overs})",color = Color(0xFFffffff),style = TextStyle(fontSize = 11.5.sp))
@@ -465,7 +442,7 @@ fun liveLegDomScoreCard(match:Matche) {
 
                                 .padding(start = 15.dp))
                         Spacer(modifier = Modifier.width(15.dp))
-                        if(match.matchScore.team1Score!=null){
+                        if(match.matchScore?.team1Score!=null){
                             Text(text = "${match.matchScore?.team2Score?.inngs1?.runs}-${match.matchScore?.team2Score?.inngs1?.wickets}", color = Color(0xFF6eb5ee),style = TextStyle(fontSize = 20.sp), fontWeight = FontWeight.Bold)
                             Spacer(modifier = Modifier.width(5.dp))
                             Text(text = "(${match.matchScore?.team2Score?.inngs1?.overs})",color = Color(0xFFffffff),style = TextStyle(fontSize = 11.5.sp))

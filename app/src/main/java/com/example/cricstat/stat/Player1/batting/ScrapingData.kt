@@ -77,11 +77,7 @@ import java.time.format.DateTimeFormatter
 
 
                 // Log the data
-                withContext(Dispatchers.Main) {
-                    val firstRow = dataByYear[4]
-                    val runs = firstRow[1]
-                    Log.d("CricmetricScraper", "$allYearStat")
-                }
+
                 dataByYear.add(0,allYearStat)
                 val firstRow = dataByYear[index]
                 years.add(0,"Years")

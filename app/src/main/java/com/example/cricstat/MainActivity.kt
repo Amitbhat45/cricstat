@@ -1,5 +1,6 @@
 package com.example.cricstat
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -8,6 +9,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -18,23 +20,34 @@ import com.example.cricstat.ui.theme.CricstatTheme
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.cricstat.GlobalNavController.navController
 
 import com.example.cricstat.screens.Mains.MainSCreen
 import com.example.cricstat.screens.Logins.login1
+import com.example.cricstat.screens.Mains.BottomAppBarr
 import com.example.cricstat.screens.Mains.loginprofile
+import com.example.cricstat.screens.stats.PlayerStats
+import com.example.cricstat.screens.stats.playeraddscreen
 import com.example.cricstat.sign_in.GoogleAuthUiClient
 import com.example.cricstat.sign_in.SignInViewModel
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.auth.api.identity.SignInClient
 import kotlinx.coroutines.launch
 
+
+object GlobalNavController {
+    lateinit var navController: NavController
+}
 class MainActivity : ComponentActivity() {
     private lateinit var signInClient: SignInClient
     private lateinit var googleAuthUiClient: GoogleAuthUiClient
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         signInClient = Identity.getSignInClient(applicationContext)
@@ -58,11 +71,9 @@ class MainActivity : ComponentActivity() {
                 ) {
 
                     // MyActivityContent(this)
-                    val navController = rememberNavController()
-
-
-
-                    NavHost(navController = navController, startDestination = "login1") {
+                    //val navController = rememberNavController()
+                    GlobalNavController.navController = rememberNavController()
+                    NavHost(navController = navController as NavHostController, startDestination = "login1") {
                         composable("login1") {
                             val viewModel = viewModel<SignInViewModel>()
                             val state by viewModel.state.collectAsStateWithLifecycle()
@@ -133,7 +144,8 @@ class MainActivity : ComponentActivity() {
                         composable("mainscreen") {
                             MainSCreen(
                                 userData = googleAuthUiClient.getSignedInUser(),
-                                onSignOut = {
+                                //navController
+                                /*onSignOut = {
                                     lifecycleScope.launch {
                                         googleAuthUiClient.signOut()
                                         Toast.makeText(
@@ -144,7 +156,7 @@ class MainActivity : ComponentActivity() {
 
                                         navController.popBackStack()
                                     }
-                                }
+                                }*/
                             )
                         }
                         composable("loginprofile"){
@@ -164,8 +176,17 @@ class MainActivity : ComponentActivity() {
 
 
                         }
+                        composable("statsscreen/{playerName1}/{playerName2}"){
+                            val playerName1 = it.arguments?.getString("playerName1") ?: ""
+                            val playerName2 = it.arguments?.getString("playerName2") ?: ""
+                            PlayerStats(playerName1,playerName2,googleAuthUiClient.getSignedInUser())
+                        }
+                        composable("addplayerscreen"){
+                            playeraddscreen()
+                        }
 
                     }
+
                 }
 
 

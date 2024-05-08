@@ -1,5 +1,4 @@
-package com.example.cricstat.stat.Player2.batting
-
+package com.example.cricstat.stat.Player2.batting.bowling
 
 import android.os.Build
 import android.util.Log
@@ -23,7 +22,7 @@ import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
 
-fun scrapingData2(text:String,index2:Int): Deferred<Pair<List<String>,List<String>>>{
+fun Iplbowling2(text:String,index2:Int): Deferred<Pair<List<String>,List<String>>>{
     // val timestamp = System.currentTimeMillis()
     val client = OkHttpClient.Builder()
         .cache(null) // Disable caching
@@ -38,7 +37,7 @@ fun scrapingData2(text:String,index2:Int): Deferred<Pair<List<String>,List<Strin
             val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
             val formattedDate = currentDate.format(formatter)
             // Connect to the URL
-            val doc: Document = Jsoup.connect("http://www.cricmetric.com/playerstats.py?player=${text.split(" ")[0]}+${text.split(" ")[1]}&role=batsman&format=all&groupby=year&playerStatsFilters=on&start_date=2002-01-01&end_date=$formattedDate&tournament=ipl&start_over=0&end_over=9999&max_innings=1000")
+            val doc: Document = Jsoup.connect("http://www.cricmetric.com/playerstats.py?player=${text.split(" ")[0]}+${text.split(" ")[1]}&role=bowler&format=all&groupby=year&playerStatsFilters=on&start_date=2002-01-01&end_date=$formattedDate&tournament=ipl&start_over=0&end_over=9999&max_innings=1000")
                 .timeout(100000)
                 .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3")
                 .get()
@@ -91,4 +90,3 @@ fun scrapingData2(text:String,index2:Int): Deferred<Pair<List<String>,List<Strin
     }
     return deferredData2
 }
-

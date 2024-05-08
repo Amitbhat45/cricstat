@@ -51,7 +51,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.cricstat.GlobalNavController
 import com.example.cricstat.retrofitmatchlist.Repository1
 import com.example.cricstat.retrofitmatchlist.dataclass.Matche
 import com.example.cricstat.retrofitmatchlist.dataclass.TypeMatche
@@ -82,17 +87,17 @@ fun setStatusBarColor(color: Color) {
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun MainSCreen(userData: UserData?,
-               onSignOut: () -> Unit,){
+               ){
     val scope = rememberCoroutineScope()
     val pagerState = rememberPagerState(pageCount = { hometabs.size})
     val selectedTabIndex = remember { derivedStateOf { pagerState.currentPage } }
 
     val matchList=retrofitInstance.ProvideApi(retrofitInstance.provideRetrofit())
     val repository=Repository1(matchList)
-    /*val myViewModel: ViewModelmatchList= viewModel(
-        factory = MyViewModelFactory(repository)
-    )*/
     val myViewModel=ViewModelmatchList(repository)
+
+    val navController = GlobalNavController.navController
+
     
     
     setStatusBarColor(color = Color(0xff1b1a25))
@@ -104,8 +109,8 @@ fun MainSCreen(userData: UserData?,
     ){
         Scaffold (containerColor = Color(0xff1b1a25),
             modifier = Modifier.padding(all=5.dp),
-            bottomBar = {  Box(modifier = Modifier.padding(all = 30.dp)) { // Wrap the BottomAppBar in a Box and apply 30.dp padding
-                BottomAppBarr()
+            bottomBar = {  Box(modifier = Modifier.padding(all = 30.dp)) {
+                BottomAppBarr(navController)
             }}){
             Column {
                 Column (modifier = Modifier

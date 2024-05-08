@@ -1,14 +1,23 @@
 package com.example.cricstat.navigation
 
+import androidx.compose.runtime.Composable
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.cricstat.sign_in.GoogleAuthUiClient
+import com.example.cricstat.screens.Mains.MainSCreen
+
+
 /*
 @Composable
-fun navigation(context: Context) {
-    val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "login1") {
-        composable("login1") { login1(navController = navController, context =context ) }
+fun navigation() {
+    val nav = rememberNavController()
+    NavHost(navController = nav, startDestination = "mainscreen") {
+
         composable("mainscreen") {
-            MainSCreen(navController)
+            MainSCreen(GoogleAuthUiClient.get,nav)
 
         }
     }
-}*/
+}
+*/

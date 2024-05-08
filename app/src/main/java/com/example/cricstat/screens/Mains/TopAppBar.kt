@@ -27,13 +27,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.example.cricstat.GlobalNavController
 import com.example.cricstat.sign_in.UserData
 
 
 @Composable
 fun TopAppBar(userData: UserData?){
+    val navController=GlobalNavController.navController
     Row ( verticalAlignment = Alignment.CenterVertically){
-        Image(painter = painterResource(id = R.drawable.topbarlogo), contentDescription = "", modifier = Modifier.size(55.dp))
+        Image(painter = painterResource(id = R.drawable.topbarlogo), contentDescription = "", modifier = Modifier.size(55.dp)
+
+        )
 
         Spacer(modifier = Modifier.width(270.dp))
         if(userData?.profilePictureUrl != null) {
@@ -42,7 +46,8 @@ fun TopAppBar(userData: UserData?){
                 contentDescription = "Profile picture",
                 modifier = Modifier
                     .size(32.dp)
-                    .clip(CircleShape),
+                    .clip(CircleShape).
+                    clickable(onClick = {navController.navigate("loginprofile")}),
                 contentScale = ContentScale.Crop,
 
             )

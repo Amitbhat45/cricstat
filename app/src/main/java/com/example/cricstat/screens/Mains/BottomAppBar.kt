@@ -24,8 +24,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.cricstat.R
+import com.example.cricstat.screens.stats.playeraddscreen
+import com.example.cricstat.screens.stats.statss
+import com.example.cricstat.sign_in.GoogleAuthUiClient
 import com.exyte.animatednavbar.AnimatedNavigationBar
 import com.exyte.animatednavbar.animation.balltrajectory.Parabolic
 import com.exyte.animatednavbar.animation.balltrajectory.Straight
@@ -33,10 +41,17 @@ import com.exyte.animatednavbar.animation.balltrajectory.Teleport
 import com.exyte.animatednavbar.animation.indendshape.Height
 import com.exyte.animatednavbar.animation.indendshape.shapeCornerRadius
 import com.exyte.animatednavbar.utils.noRippleClickable
+import com.google.android.gms.auth.api.identity.Identity
+import com.google.android.gms.auth.api.identity.SignInClient
 
 
 @Composable
-fun BottomAppBarr(){
+fun BottomAppBarr(navController: NavController){
+
+
+
+
+
     val navigationBarItems =remember{NavigationBarItems.values()}
     var selectedIndex by remember { mutableStateOf(0) }
     AnimatedNavigationBar(selectedIndex = selectedIndex,
@@ -50,10 +65,18 @@ fun BottomAppBarr(){
         navigationBarItems.forEach{item->
             Box(modifier = Modifier
                 .fillMaxSize()
-                .noRippleClickablee{ selectedIndex = item.ordinal }
+                .noRippleClickablee { selectedIndex = item.ordinal }
                 , contentAlignment = Alignment.Center){
              Icon(imageVector = item.icon, contentDescription = "",
-                 modifier=Modifier.size(26.dp),
+                 modifier= Modifier
+                     .size(26.dp)
+                     .clickable {
+                         when (item) {
+                             NavigationBarItems.Home -> navController.navigate("mainscreen")
+                             NavigationBarItems.search -> navController.navigate("addplayerscreen")
+                             //NavigationBarItems.compare -> navController.navigate("loginprofile")
+                         }
+                     },
                  tint = if(selectedIndex==item.ordinal) Color(0xFF030618)
              else Color(0xFF44434f))
             }
@@ -61,12 +84,13 @@ fun BottomAppBarr(){
 
     }
 
+
 }
 
 enum class NavigationBarItems(val icon:ImageVector){
     Home(icon = Icons.Default.Home),
     search(icon=Icons.Default.Search),
-    compare(icon= Icons.Default.Menu)
+
 }
 
 fun Modifier.noRippleClickablee(onClick:()->Unit):Modifier=composed{
@@ -76,4 +100,46 @@ fun Modifier.noRippleClickablee(onClick:()->Unit):Modifier=composed{
     ){
         onClick()
     }
+}
+
+@Composable
+fun BottomAppBarr2(navController: NavController){
+
+
+
+
+
+    val navigationBarItems =remember{NavigationBarItems.values()}
+    var selectedIndex by remember { mutableStateOf(1) }
+    AnimatedNavigationBar(selectedIndex = selectedIndex,
+        modifier = Modifier.height(64.dp),
+        cornerRadius = shapeCornerRadius(cornerRadius = 50.dp),
+        ballAnimation = Parabolic(tween(300)),
+        indentAnimation = Height(tween(300)),
+        barColor = Color(0xFF8fcce3),
+        ballColor = Color(0xFF8fcce3)
+    ) {
+        navigationBarItems.forEach{item->
+            Box(modifier = Modifier
+                .fillMaxSize()
+                .noRippleClickablee { selectedIndex = item.ordinal }
+                , contentAlignment = Alignment.Center){
+                Icon(imageVector = item.icon, contentDescription = "",
+                    modifier= Modifier
+                        .size(26.dp)
+                        .clickable {
+                            when (item) {
+                                NavigationBarItems.Home -> navController.navigate("mainscreen")
+                                NavigationBarItems.search -> navController.navigate("addplayerscreen")
+                                //NavigationBarItems.compare -> navController.navigate("loginprofile")
+                            }
+                        },
+                    tint = if(selectedIndex==item.ordinal) Color(0xFF030618)
+                    else Color(0xFF44434f))
+            }
+        }
+
+    }
+
+
 }

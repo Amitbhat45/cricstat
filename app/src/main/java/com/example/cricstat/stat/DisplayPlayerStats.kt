@@ -52,22 +52,37 @@ import com.example.cricstat.stat.Player1.batting.TestData1
 import com.example.cricstat.stat.Player1.getinfo
 
 import com.example.cricstat.stat.Player1.batting.scrapingData1
+import com.example.cricstat.stat.Player1.bowling.Iplbowling1
+import com.example.cricstat.stat.Player1.bowling.Odibowling1
+import com.example.cricstat.stat.Player1.bowling.T20bowling1
+import com.example.cricstat.stat.Player1.bowling.Testbowling1
 import com.example.cricstat.stat.Player2.batting.OdiData2
 import com.example.cricstat.stat.Player2.batting.T20Data2
 import com.example.cricstat.stat.Player2.batting.TestData2
+import com.example.cricstat.stat.Player2.batting.bowling.Iplbowling2
+import com.example.cricstat.stat.Player2.batting.bowling.Odibowling2
+import com.example.cricstat.stat.Player2.batting.bowling.T20bowling2
+import com.example.cricstat.stat.Player2.batting.bowling.Testbowling2
 import com.example.cricstat.stat.Player2.batting.scrapingData2
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun DisplayPlayerStats() {
+fun DisplayPlayerStats(player1:String,player2:String) {
   Column {
 
       val dataByYear = remember { mutableStateOf<List<String>?>(null) }
       val years1 = remember { mutableStateOf<List<String>?>(null) }
 
-
       val dataByYear2 = remember { mutableStateOf<List<String>?>(null) }
       val years2 = remember { mutableStateOf<List<String>?>(null) }
+
+      val dataByYearbowling = remember { mutableStateOf<List<String>?>(null) }
+      val years1bowling = remember { mutableStateOf<List<String>?>(null) }
+
+      val dataByYear2bowling = remember { mutableStateOf<List<String>?>(null) }
+      val years2bowling = remember { mutableStateOf<List<String>?>(null) }
+
+
 
       val list = listOf("Test", "Odi", "T20I", "Ipl")
       val defaultSelected = "Test"
@@ -103,18 +118,18 @@ Row {
 
 
     Box(
-          modifier
-              .padding(start = 18.dp)
-              .width(70.dp)
-              .height(45.dp)
-              .border(
-                  border = BorderStroke(stroke.dp, color),
-                  shape = RoundedCornerShape(4.dp)
-              )
-              .clickable {
-                  expand = true
-                  stroke = if (expand) 2 else 1
-              },
+        modifier
+            .padding(start = 18.dp)
+            .width(70.dp)
+            .height(45.dp)
+            .border(
+                border = BorderStroke(stroke.dp, color),
+                shape = RoundedCornerShape(4.dp)
+            )
+            .clickable {
+                expand = true
+                stroke = if (expand) 2 else 1
+            },
           contentAlignment = Alignment.Center
       ) {
 
@@ -156,6 +171,7 @@ Row {
                           selectedIndex = index
                           expand = false
                           stroke = if (expand) 2 else 1
+                          selectedIndex1=0
                           //onSelected(selectedIndex)
                       }
                   )
@@ -242,6 +258,7 @@ Row {
                 .clickable {
                     expand2 = true
                     stroke2 = if (expand) 2 else 1
+
                 },
             contentAlignment = Alignment.Center
         ) {
@@ -284,6 +301,7 @@ Row {
                             selectedIndex2 = index2
                             expand2 = false
                             stroke2 = if (expand2) 2 else 1
+                            selectedIndex3 = 0
                             //onSelected(selectedIndex)
                         }
                     )
@@ -361,68 +379,260 @@ Row {
         if (selectedIndex == 0) {
 
             LaunchedEffect(selectedIndex1) {
-                val deferredData = TestData1(text = "Virat Kohli", index = selectedIndex1 ?: 0)
-                val (fetchedPlayerYearbyData, fetchedAlltimeData) = deferredData.await()
+                val deferredData = TestData1(text = player1, index = selectedIndex1 ?: 0)
+
+                // Handle potential null deferredData gracefully
+                val (fetchedPlayerYearbyData, fetchedAlltimeData) = try {
+                    deferredData?.await() ?: Pair(emptyList(), emptyList())
+                } catch (e: Exception) {
+                    // Handle exceptions from deferredData.await() appropriately
+                    // (e.g., log the error, display a user-friendly message)
+                    emptyList<String>() to emptyList<String>()
+                }
+
                 dataByYear.value = fetchedPlayerYearbyData
                 years1.value = fetchedAlltimeData
+            }
+            LaunchedEffect(selectedIndex1) {
+                val deferredDatabowling = Testbowling1(text = player1, index = selectedIndex1 ?: 0)
+
+                // Handle potential null deferredData gracefully
+                val (fetchedPlayerYearbyData, fetchedAlltimeData) = try {
+                    deferredDatabowling?.await() ?: Pair(emptyList(), emptyList())
+                } catch (e: Exception) {
+                    // Handle exceptions from deferredData.await() appropriately
+                    // (e.g., log the error, display a user-friendly message)
+                    emptyList<String>() to emptyList<String>()
+                }
+
+                dataByYearbowling.value = fetchedPlayerYearbyData
+                years1bowling.value = fetchedAlltimeData
             }
         } else if (selectedIndex == 1) {
 
             LaunchedEffect(selectedIndex1) {
-                val deferredData = OdiData1(text = "Virat Kohli", selectedIndex1 ?: 0)
-                val (fetchedPlayerYearbyData, fetchedAlltimeData) = deferredData.await()
+                val deferredData = OdiData1(text = player1, index = selectedIndex1 ?: 0)
+
+                // Handle potential null deferredData gracefully
+                val (fetchedPlayerYearbyData, fetchedAlltimeData) = try {
+                    deferredData?.await() ?: Pair(emptyList(), emptyList())
+                } catch (e: Exception) {
+                    // Handle exceptions from deferredData.await() appropriately
+                    // (e.g., log the error, display a user-friendly message)
+                    emptyList<String>() to emptyList<String>()
+                }
+
                 dataByYear.value = fetchedPlayerYearbyData
                 years1.value = fetchedAlltimeData
+            }
+            LaunchedEffect(selectedIndex1) {
+                val deferredDatabowling = Odibowling1(text = player1, index = selectedIndex1 ?: 0)
+
+                // Handle potential null deferredData gracefully
+                val (fetchedPlayerYearbyData, fetchedAlltimeData) = try {
+                    deferredDatabowling?.await() ?: Pair(emptyList(), emptyList())
+                } catch (e: Exception) {
+                    // Handle exceptions from deferredData.await() appropriately
+                    // (e.g., log the error, display a user-friendly message)
+                    emptyList<String>() to emptyList<String>()
+                }
+
+                dataByYearbowling.value = fetchedPlayerYearbyData
+                years1bowling.value = fetchedAlltimeData
             }
         } else if (selectedIndex == 2) {
 
             LaunchedEffect(selectedIndex1) {
-                val deferredData = T20Data1(text = "Virat Kohli", selectedIndex1 ?: 0)
-                val (fetchedPlayerYearbyData, fetchedAlltimeData) = deferredData.await()
+                val deferredData = T20Data1(text = player1, index = selectedIndex1 ?: 0)
+
+                // Handle potential null deferredData gracefully
+                val (fetchedPlayerYearbyData, fetchedAlltimeData) = try {
+                    deferredData?.await() ?: Pair(emptyList(), emptyList())
+                } catch (e: Exception) {
+                    // Handle exceptions from deferredData.await() appropriately
+                    // (e.g., log the error, display a user-friendly message)
+                    emptyList<String>() to emptyList<String>()
+                }
+
                 dataByYear.value = fetchedPlayerYearbyData
                 years1.value = fetchedAlltimeData
+            }
+            LaunchedEffect(selectedIndex1) {
+                val deferredDatabowling = T20bowling1(text = player1, index = selectedIndex1 ?: 0)
+
+                // Handle potential null deferredData gracefully
+                val (fetchedPlayerYearbyData, fetchedAlltimeData) = try {
+                    deferredDatabowling?.await() ?: Pair(emptyList(), emptyList())
+                } catch (e: Exception) {
+                    // Handle exceptions from deferredData.await() appropriately
+                    // (e.g., log the error, display a user-friendly message)
+                    emptyList<String>() to emptyList<String>()
+                }
+
+                dataByYearbowling.value = fetchedPlayerYearbyData
+                years1bowling.value = fetchedAlltimeData
             }
         } else if (selectedIndex == 3) {
 
             LaunchedEffect(selectedIndex1) {
-                val deferredData = scrapingData1(text = "Virat Kohli", selectedIndex1 ?: 0)
-                val (fetchedPlayerYearbyData, fetchedAlltimeData) = deferredData.await()
+                val deferredData = scrapingData1(text = player1, index = selectedIndex1 ?: 0)
+
+                // Handle potential null deferredData gracefully
+                val (fetchedPlayerYearbyData, fetchedAlltimeData) = try {
+                    deferredData?.await() ?: Pair(emptyList(), emptyList())
+                } catch (e: Exception) {
+                    // Handle exceptions from deferredData.await() appropriately
+                    // (e.g., log the error, display a user-friendly message)
+                    emptyList<String>() to emptyList<String>()
+                }
+
                 dataByYear.value = fetchedPlayerYearbyData
                 years1.value = fetchedAlltimeData
+            }
+            LaunchedEffect(selectedIndex1) {
+                val deferredDatabowling = Iplbowling1(text = player1, index = selectedIndex1 ?: 0)
+
+                // Handle potential null deferredData gracefully
+                val (fetchedPlayerYearbyData, fetchedAlltimeData) = try {
+                    deferredDatabowling?.await() ?: Pair(emptyList(), emptyList())
+                } catch (e: Exception) {
+                    // Handle exceptions from deferredData.await() appropriately
+                    // (e.g., log the error, display a user-friendly message)
+                    emptyList<String>() to emptyList<String>()
+                }
+
+                dataByYearbowling.value = fetchedPlayerYearbyData
+                years1bowling.value = fetchedAlltimeData
             }
         }
 
       if (selectedIndex2 == 0) {
 
           LaunchedEffect(selectedIndex3) {
-              val deferredData2 = TestData2(text = "Sachin Tendulkar", index2 = selectedIndex3 ?: 0)
-              val (fetchedPlayerYearbyData, fetchedAlltimeData) = deferredData2.await()
-              dataByYear2.value = fetchedPlayerYearbyData
-              years2.value = fetchedAlltimeData
+              val deferredData2 = TestData2(text = player2, index2 = selectedIndex3 ?: 0)
+
+              // Handle potential null deferredData gracefully
+              val (fetchedPlayerYearbyData2, fetchedAlltimeData2) = try {
+                  deferredData2?.await() ?: Pair(emptyList(), emptyList())
+              } catch (e: Exception) {
+                  // Handle exceptions from deferredData.await() appropriately
+                  // (e.g., log the error, display a user-friendly message)
+                  emptyList<String>() to emptyList<String>()
+              }
+
+              dataByYear2.value = fetchedPlayerYearbyData2
+              years2.value = fetchedAlltimeData2
+          }
+          LaunchedEffect(selectedIndex3) {
+              val deferredData2bowling = Testbowling2(text = player2, index = selectedIndex3 ?: 0)
+
+              // Handle potential null deferredData gracefully
+              val (fetchedPlayerYearbyData2, fetchedAlltimeData2) = try {
+                  deferredData2bowling?.await() ?: Pair(emptyList(), emptyList())
+              } catch (e: Exception) {
+                  // Handle exceptions from deferredData.await() appropriately
+                  // (e.g., log the error, display a user-friendly message)
+                  emptyList<String>() to emptyList<String>()
+              }
+
+              dataByYear2bowling.value = fetchedPlayerYearbyData2
+              years2bowling.value = fetchedAlltimeData2
           }
       } else if (selectedIndex2 == 1) {
 
           LaunchedEffect(selectedIndex3) {
-              val deferredData2 = OdiData2(text = "Sachin Tendulkar", selectedIndex3 ?: 0)
-              val (fetchedPlayerYearbyData, fetchedAlltimeData) = deferredData2.await()
-              dataByYear2.value = fetchedPlayerYearbyData
-              years2.value = fetchedAlltimeData
+              val deferredData2 = OdiData2(text = player2, index2 = selectedIndex3 ?: 0)
+
+              // Handle potential null deferredData gracefully
+              val (fetchedPlayerYearbyData2, fetchedAlltimeData2) = try {
+                  deferredData2?.await() ?: Pair(emptyList(), emptyList())
+              } catch (e: Exception) {
+                  // Handle exceptions from deferredData.await() appropriately
+                  // (e.g., log the error, display a user-friendly message)
+                  emptyList<String>() to emptyList<String>()
+              }
+
+              dataByYear2.value = fetchedPlayerYearbyData2
+              years2.value = fetchedAlltimeData2
+          }
+          LaunchedEffect(selectedIndex3) {
+              val deferredData2bowling = Odibowling2(text = player2, index2 = selectedIndex3 ?: 0)
+
+              // Handle potential null deferredData gracefully
+              val (fetchedPlayerYearbyData2, fetchedAlltimeData2) = try {
+                  deferredData2bowling?.await() ?: Pair(emptyList(), emptyList())
+              } catch (e: Exception) {
+                  // Handle exceptions from deferredData.await() appropriately
+                  // (e.g., log the error, display a user-friendly message)
+                  emptyList<String>() to emptyList<String>()
+              }
+
+              dataByYear2bowling.value = fetchedPlayerYearbyData2
+              years2bowling.value = fetchedAlltimeData2
           }
       } else if (selectedIndex2 == 2) {
 
           LaunchedEffect(selectedIndex3) {
-              val deferredData2 = T20Data2(text = "Sachin Tendulkar", selectedIndex3 ?: 0)
-              val (fetchedPlayerYearbyData, fetchedAlltimeData) = deferredData2.await()
-              dataByYear2.value = fetchedPlayerYearbyData
-              years2.value = fetchedAlltimeData
+              val deferredData2 = T20Data2(text = player2, index2 = selectedIndex3 ?: 0)
+
+              // Handle potential null deferredData gracefully
+              val (fetchedPlayerYearbyData2, fetchedAlltimeData2) = try {
+                  deferredData2?.await() ?: Pair(emptyList(), emptyList())
+              } catch (e: Exception) {
+                  // Handle exceptions from deferredData.await() appropriately
+                  // (e.g., log the error, display a user-friendly message)
+                  emptyList<String>() to emptyList<String>()
+              }
+
+              dataByYear2.value = fetchedPlayerYearbyData2
+              years2.value = fetchedAlltimeData2
+          }
+          LaunchedEffect(selectedIndex3) {
+              val deferredData2bowling = T20bowling2(text = player2, index2 = selectedIndex3 ?: 0)
+
+              // Handle potential null deferredData gracefully
+              val (fetchedPlayerYearbyData2, fetchedAlltimeData2) = try {
+                  deferredData2bowling?.await() ?: Pair(emptyList(), emptyList())
+              } catch (e: Exception) {
+                  // Handle exceptions from deferredData.await() appropriately
+                  // (e.g., log the error, display a user-friendly message)
+                  emptyList<String>() to emptyList<String>()
+              }
+
+              dataByYear2bowling.value = fetchedPlayerYearbyData2
+              years2bowling.value = fetchedAlltimeData2
           }
       } else if (selectedIndex2 == 3) {
 
           LaunchedEffect(selectedIndex3) {
-              val deferredData2 = scrapingData2(text = "Sachin Tendulkar", selectedIndex3 ?: 0)
-              val (fetchedPlayerYearbyData, fetchedAlltimeData) = deferredData2.await()
-              dataByYear2.value = fetchedPlayerYearbyData
-              years2.value = fetchedAlltimeData
+              val deferredData2 = scrapingData2(text = player2, index2 = selectedIndex3 ?: 0)
+
+              // Handle potential null deferredData gracefully
+              val (fetchedPlayerYearbyData2, fetchedAlltimeData2) = try {
+                  deferredData2?.await() ?: Pair(emptyList(), emptyList())
+              } catch (e: Exception) {
+                  // Handle exceptions from deferredData.await() appropriately
+                  // (e.g., log the error, display a user-friendly message)
+                  emptyList<String>() to emptyList<String>()
+              }
+
+              dataByYear2.value = fetchedPlayerYearbyData2
+              years2.value = fetchedAlltimeData2
+          }
+          LaunchedEffect(selectedIndex3) {
+              val deferredData2bowling = Iplbowling2(text = player2, index2 = selectedIndex3 ?: 0)
+
+              // Handle potential null deferredData gracefully
+              val (fetchedPlayerYearbyData2, fetchedAlltimeData2) = try {
+                  deferredData2bowling?.await() ?: Pair(emptyList(), emptyList())
+              } catch (e: Exception) {
+                  // Handle exceptions from deferredData.await() appropriately
+                  // (e.g., log the error, display a user-friendly message)
+                  emptyList<String>() to emptyList<String>()
+              }
+
+              dataByYear2bowling.value = fetchedPlayerYearbyData2
+              years2bowling.value = fetchedAlltimeData2
           }
       }
 
@@ -442,14 +652,16 @@ Row {
               .padding(start = 18.dp),
           elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
       ) {
-          Box(
+         /* Box(
               modifier = Modifier
                   .fillMaxWidth()
                   .height(45.dp)
           ) {
               BattingAndBowlingButtons()
 
-          }
+          }*/
+         val selectedbutton= BattingAndBowlingButtons(selectedIndex1,selectedIndex3)
+          if(selectedbutton=="batting"){
           Box(
               modifier = Modifier
                   .fillMaxWidth()
@@ -460,28 +672,32 @@ Row {
                   modifier = Modifier.fillMaxSize(),
                   verticalAlignment = Alignment.CenterVertically,
               ) {
-                  (dataByYear.value?.get(1) ?: null)?.let {
-                      Text(
-                          text = it,
-                          color = Color.White,
-                          style = TextStyle(fontSize = 17.sp),
-                          modifier = Modifier.padding(start = 15.dp)
-                      )
-                  }
+                  Text(
+                      text = if (dataByYear.value?.isEmpty() != true) {
+                          dataByYear.value?.get(1) ?: "No data"  // Display "No data" for empty list
+                      } else {
+                          ""  // Display empty string for null or truly empty list
+                      },
+                      color = Color.White,
+                      style = TextStyle(fontSize = 17.sp),
+                      modifier = Modifier.padding(start = 15.dp)
+                  )
                   Spacer(modifier = Modifier.weight(1f))
                   Text(
                       text = "Innings", color = Color.White, style = TextStyle(fontSize = 17.sp)
                   )
                   Spacer(modifier = Modifier.weight(1f))
                   //Spacer(modifier = Modifier.width(102.dp))
-                  (dataByYear2.value?.get(1) ?: null)?.let {
-                      Text(
-                          text = it,
-                          color = Color.White,
-                          style = TextStyle(fontSize = 17.sp),
-                          modifier = Modifier.padding(end = 15.dp)
-                      )
-                  }
+                  Text(
+                      text = if (dataByYear2.value?.isEmpty() != true) {
+                          dataByYear2.value?.get(1) ?: "No data"  // Display "No data" for empty list
+                      } else {
+                          ""  // Display empty string for null or truly empty list
+                      },
+                      color = Color.White,
+                      style = TextStyle(fontSize = 17.sp),
+                      modifier = Modifier.padding(end = 15.dp)
+                  )
 
               }
           }
@@ -496,27 +712,31 @@ Row {
                   modifier = Modifier.fillMaxSize(),
                   verticalAlignment = Alignment.CenterVertically
               ) {
-                  (dataByYear.value?.get(2) ?: null)?.let {
-                      Text(
-                          text = it,
-                          color = Color.White,
-                          style = TextStyle(fontSize = 17.sp),
-                          modifier = Modifier.padding(start = 15.dp)
-                      )
-                  }
+                  Text(
+                      text = if (dataByYear.value?.isEmpty() != true) {
+                          dataByYear.value?.get(2) ?: "No data"  // Display "No data" for empty list
+                      } else {
+                          ""  // Display empty string for null or truly empty list
+                      },
+                      color = Color.White,
+                      style = TextStyle(fontSize = 17.sp),
+                      modifier = Modifier.padding(start = 15.dp)
+                  )
                   Spacer(modifier = Modifier.weight(1f))
                   Text(
                       text = "Runs", color = Color.White, style = TextStyle(fontSize = 17.sp)
                   )
                   Spacer(modifier = Modifier.weight(1f))
-                  (dataByYear2.value?.get(2) ?: null)?.let {
-                      Text(
-                          text = it,
-                          color = Color.White,
-                          style = TextStyle(fontSize = 17.sp),
-                          modifier = Modifier.padding(end = 15.dp)
-                      )
-                  }
+                  Text(
+                      text = if (dataByYear2.value?.isEmpty() != true) {
+                          dataByYear2.value?.get(2) ?: "No data"  // Display "No data" for empty list
+                      } else {
+                          ""  // Display empty string for null or truly empty list
+                      },
+                      color = Color.White,
+                      style = TextStyle(fontSize = 17.sp),
+                      modifier = Modifier.padding(end = 15.dp)
+                  )
 
               }
           }
@@ -531,27 +751,31 @@ Row {
                   modifier = Modifier.fillMaxSize(),
                   verticalAlignment = Alignment.CenterVertically
               ) {
-                  (dataByYear.value?.get(3) ?: null)?.let {
-                      Text(
-                          text = it,
-                          color = Color.White,
-                          style = TextStyle(fontSize = 17.sp),
-                          modifier = Modifier.padding(start = 15.dp)
-                      )
-                  }
+                  Text(
+                      text = if (dataByYear.value?.isEmpty() != true) {
+                          dataByYear.value?.get(3) ?: "No data"  // Display "No data" for empty list
+                      } else {
+                          ""  // Display empty string for null or truly empty list
+                      },
+                      color = Color.White,
+                      style = TextStyle(fontSize = 17.sp),
+                      modifier = Modifier.padding(start = 15.dp)
+                  )
                   Spacer(modifier = Modifier.weight(1f))
                   Text(
                       text = "Balls", color = Color.White, style = TextStyle(fontSize = 17.sp)
                   )
                   Spacer(modifier = Modifier.weight(1f))
-                  (dataByYear2.value?.get(3) ?: null)?.let {
-                      Text(
-                          text = it,
-                          color = Color.White,
-                          style = TextStyle(fontSize = 17.sp),
-                          modifier = Modifier.padding(end = 15.dp)
-                      )
-                  }
+                  Text(
+                      text = if (dataByYear2.value?.isEmpty() != true) {
+                          dataByYear2.value?.get(3) ?: "No data"  // Display "No data" for empty list
+                      } else {
+                          ""  // Display empty string for null or truly empty list
+                      },
+                      color = Color.White,
+                      style = TextStyle(fontSize = 17.sp),
+                      modifier = Modifier.padding(end = 15.dp)
+                  )
 
               }
           }
@@ -566,27 +790,31 @@ Row {
                   modifier = Modifier.fillMaxSize(),
                   verticalAlignment = Alignment.CenterVertically
               ) {
-                  (dataByYear.value?.get(4) ?: null)?.let {
-                      Text(
-                          text = it,
-                          color = Color.White,
-                          style = TextStyle(fontSize = 17.sp),
-                          modifier = Modifier.padding(start = 15.dp)
-                      )
-                  }
+                  Text(
+                      text = if (dataByYear.value?.isEmpty() != true) {
+                          dataByYear.value?.get(4) ?: "No data"  // Display "No data" for empty list
+                      } else {
+                          ""  // Display empty string for null or truly empty list
+                      },
+                      color = Color.White,
+                      style = TextStyle(fontSize = 17.sp),
+                      modifier = Modifier.padding(start = 15.dp)
+                  )
                   Spacer(modifier = Modifier.weight(1f))
                   Text(
                       text = "Outs", color = Color.White, style = TextStyle(fontSize = 17.sp)
                   )
                   Spacer(modifier = Modifier.weight(1f))
-                  (dataByYear2.value?.get(4) ?: null)?.let {
-                      Text(
-                          text = it,
-                          color = Color.White,
-                          style = TextStyle(fontSize = 17.sp),
-                          modifier = Modifier.padding(end = 15.dp)
-                      )
-                  }
+                  Text(
+                      text = if (dataByYear2.value?.isEmpty() != true) {
+                          dataByYear2.value?.get(4) ?: "No data"  // Display "No data" for empty list
+                      } else {
+                          ""  // Display empty string for null or truly empty list
+                      },
+                      color = Color.White,
+                      style = TextStyle(fontSize = 17.sp),
+                      modifier = Modifier.padding(end = 15.dp)
+                  )
 
               }
           }
@@ -601,27 +829,31 @@ Row {
                   modifier = Modifier.fillMaxSize(),
                   verticalAlignment = Alignment.CenterVertically
               ) {
-                  (dataByYear.value?.get(5) ?: null)?.let {
-                      Text(
-                          text = it,
-                          color = Color.White,
-                          style = TextStyle(fontSize = 17.sp),
-                          modifier = Modifier.padding(start = 15.dp)
-                      )
-                  }
+                  Text(
+                      text = if (dataByYear.value?.isEmpty() != true) {
+                          dataByYear.value?.get(5) ?: "No data"  // Display "No data" for empty list
+                      } else {
+                          ""  // Display empty string for null or truly empty list
+                      },
+                      color = Color.White,
+                      style = TextStyle(fontSize = 17.sp),
+                      modifier = Modifier.padding(start = 15.dp)
+                  )
                   Spacer(modifier = Modifier.weight(1f))
                   Text(
                       text = "Average", color = Color.White, style = TextStyle(fontSize = 17.sp)
                   )
                   Spacer(modifier = Modifier.weight(1f))
-                  (dataByYear2.value?.get(5) ?: null)?.let {
-                      Text(
-                          text = it,
-                          color = Color.White,
-                          style = TextStyle(fontSize = 17.sp),
-                          modifier = Modifier.padding(end = 15.dp)
-                      )
-                  }
+                  Text(
+                      text = if (dataByYear2.value?.isEmpty() != true) {
+                          dataByYear2.value?.get(5) ?: "No data"  // Display "No data" for empty list
+                      } else {
+                          ""  // Display empty string for null or truly empty list
+                      },
+                      color = Color.White,
+                      style = TextStyle(fontSize = 17.sp),
+                      modifier = Modifier.padding(end = 15.dp)
+                  )
 
               }
           }
@@ -636,27 +868,31 @@ Row {
                   modifier = Modifier.fillMaxSize(),
                   verticalAlignment = Alignment.CenterVertically
               ) {
-                  (dataByYear.value?.get(6) ?: null)?.let {
-                      Text(
-                          text = it,
-                          color = Color.White,
-                          style = TextStyle(fontSize = 17.sp),
-                          modifier = Modifier.padding(start = 15.dp)
-                      )
-                  }
+                  Text(
+                      text = if (dataByYear.value?.isEmpty() != true) {
+                          dataByYear.value?.get(6) ?: "No data"  // Display "No data" for empty list
+                      } else {
+                          ""  // Display empty string for null or truly empty list
+                      },
+                      color = Color.White,
+                      style = TextStyle(fontSize = 17.sp),
+                      modifier = Modifier.padding(start = 15.dp)
+                  )
                   Spacer(modifier = Modifier.weight(1f))
                   Text(
                       text = "StrikeRate", color = Color.White, style = TextStyle(fontSize = 17.sp)
                   )
                   Spacer(modifier = Modifier.weight(1f))
-                  (dataByYear2.value?.get(6) ?: null)?.let {
-                      Text(
-                          text = it,
-                          color = Color.White,
-                          style = TextStyle(fontSize = 17.sp),
-                          modifier = Modifier.padding(end = 15.dp)
-                      )
-                  }
+                  Text(
+                      text = if (dataByYear2.value?.isEmpty() != true) {
+                          dataByYear2.value?.get(6) ?: "No data"  // Display "No data" for empty list
+                      } else {
+                          ""  // Display empty string for null or truly empty list
+                      },
+                      color = Color.White,
+                      style = TextStyle(fontSize = 17.sp),
+                      modifier = Modifier.padding(end = 15.dp)
+                  )
 
               }
           }
@@ -671,27 +907,31 @@ Row {
                   modifier = Modifier.fillMaxSize(),
                   verticalAlignment = Alignment.CenterVertically
               ) {
-                  (dataByYear.value?.get(7) ?: null)?.let {
-                      Text(
-                          text = it,
-                          color = Color.White,
-                          style = TextStyle(fontSize = 17.sp),
-                          modifier = Modifier.padding(start = 15.dp)
-                      )
-                  }
+                  Text(
+                      text = if (dataByYear.value?.isEmpty() != true) {
+                          dataByYear.value?.get(7) ?: "No data"  // Display "No data" for empty list
+                      } else {
+                          ""  // Display empty string for null or truly empty list
+                      },
+                      color = Color.White,
+                      style = TextStyle(fontSize = 17.sp),
+                      modifier = Modifier.padding(start = 15.dp)
+                  )
                   Spacer(modifier = Modifier.weight(1f))
                   Text(
                       text = "HighScore", color = Color.White, style = TextStyle(fontSize = 17.sp)
                   )
                   Spacer(modifier = Modifier.weight(1f))
-                  (dataByYear2.value?.get(7) ?: null)?.let {
-                      Text(
-                          text = it,
-                          color = Color.White,
-                          style = TextStyle(fontSize = 17.sp),
-                          modifier = Modifier.padding(end = 15.dp)
-                      )
-                  }
+                  Text(
+                      text = if (dataByYear2.value?.isEmpty() != true) {
+                          dataByYear2.value?.get(7) ?: "No data"  // Display "No data" for empty list
+                      } else {
+                          ""  // Display empty string for null or truly empty list
+                      },
+                      color = Color.White,
+                      style = TextStyle(fontSize = 17.sp),
+                      modifier = Modifier.padding(end = 15.dp)
+                  )
 
               }
           }
@@ -706,27 +946,31 @@ Row {
                   modifier = Modifier.fillMaxSize(),
                   verticalAlignment = Alignment.CenterVertically
               ) {
-                  (dataByYear.value?.get(8) ?: null)?.let {
-                      Text(
-                          text = it,
-                          color = Color.White,
-                          style = TextStyle(fontSize = 17.sp),
-                          modifier = Modifier.padding(start = 15.dp)
-                      )
-                  }
+                  Text(
+                      text = if (dataByYear.value?.isEmpty() != true) {
+                          dataByYear.value?.get(8) ?: "No data"  // Display "No data" for empty list
+                      } else {
+                          ""  // Display empty string for null or truly empty list
+                      },
+                      color = Color.White,
+                      style = TextStyle(fontSize = 17.sp),
+                      modifier = Modifier.padding(start = 15.dp)
+                  )
                   Spacer(modifier = Modifier.weight(1f))
                   Text(
                       text = "50s", color = Color.White, style = TextStyle(fontSize = 17.sp)
                   )
                   Spacer(modifier = Modifier.weight(1f))
-                  (dataByYear2.value?.get(8) ?: null)?.let {
-                      Text(
-                          text = it,
-                          color = Color.White,
-                          style = TextStyle(fontSize = 17.sp),
-                          modifier = Modifier.padding(end = 15.dp)
-                      )
-                  }
+                  Text(
+                      text = if (dataByYear2.value?.isEmpty() != true) {
+                          dataByYear2.value?.get(8) ?: "No data"  // Display "No data" for empty list
+                      } else {
+                          ""  // Display empty string for null or truly empty list
+                      },
+                      color = Color.White,
+                      style = TextStyle(fontSize = 17.sp),
+                      modifier = Modifier.padding(end = 15.dp)
+                  )
 
               }
           }
@@ -741,27 +985,31 @@ Row {
                   modifier = Modifier.fillMaxSize(),
                   verticalAlignment = Alignment.CenterVertically
               ) {
-                  (dataByYear.value?.get(9) ?: null)?.let {
-                      Text(
-                          text = it,
-                          color = Color.White,
-                          style = TextStyle(fontSize = 17.sp),
-                          modifier = Modifier.padding(start = 15.dp)
-                      )
-                  }
+                  Text(
+                      text = if (dataByYear.value?.isEmpty() != true) {
+                          dataByYear.value?.get(9) ?: "No data"  // Display "No data" for empty list
+                      } else {
+                          ""  // Display empty string for null or truly empty list
+                      },
+                      color = Color.White,
+                      style = TextStyle(fontSize = 17.sp),
+                      modifier = Modifier.padding(start = 15.dp)
+                  )
                   Spacer(modifier = Modifier.weight(1f))
                   Text(
                       text = "100s", color = Color.White, style = TextStyle(fontSize = 17.sp)
                   )
                   Spacer(modifier = Modifier.weight(1f))
-                  (dataByYear2.value?.get(9) ?: null)?.let {
-                      Text(
-                          text = it,
-                          color = Color.White,
-                          style = TextStyle(fontSize = 17.sp),
-                          modifier = Modifier.padding(end = 15.dp)
-                      )
-                  }
+                  Text(
+                      text = if (dataByYear2.value?.isEmpty() != true) {
+                          dataByYear2.value?.get(9) ?: "No data"  // Display "No data" for empty list
+                      } else {
+                          ""  // Display empty string for null or truly empty list
+                      },
+                      color = Color.White,
+                      style = TextStyle(fontSize = 17.sp),
+                      modifier = Modifier.padding(end = 15.dp)
+                  )
 
               }
           }
@@ -776,27 +1024,31 @@ Row {
                   modifier = Modifier.fillMaxSize(),
                   verticalAlignment = Alignment.CenterVertically
               ) {
-                  (dataByYear.value?.get(10) ?: null)?.let {
-                      Text(
-                          text = it,
-                          color = Color.White,
-                          style = TextStyle(fontSize = 17.sp),
-                          modifier = Modifier.padding(start = 15.dp)
-                      )
-                  }
+                  Text(
+                      text = if (dataByYear.value?.isEmpty() != true) {
+                          dataByYear.value?.get(10) ?: "No data"  // Display "No data" for empty list
+                      } else {
+                          ""  // Display empty string for null or truly empty list
+                      },
+                      color = Color.White,
+                      style = TextStyle(fontSize = 17.sp),
+                      modifier = Modifier.padding(start = 15.dp)
+                  )
                   Spacer(modifier = Modifier.weight(1f))
                   Text(
                       text = "Fours", color = Color.White, style = TextStyle(fontSize = 17.sp)
                   )
                   Spacer(modifier = Modifier.weight(1f))
-                  (dataByYear2.value?.get(10) ?: null)?.let {
-                      Text(
-                          text = it,
-                          color = Color.White,
-                          style = TextStyle(fontSize = 17.sp),
-                          modifier = Modifier.padding(end = 15.dp)
-                      )
-                  }
+                  Text(
+                      text = if (dataByYear2.value?.isEmpty() != true) {
+                          dataByYear2.value?.get(10) ?: "No data"  // Display "No data" for empty list
+                      } else {
+                          ""  // Display empty string for null or truly empty list
+                      },
+                      color = Color.White,
+                      style = TextStyle(fontSize = 17.sp),
+                      modifier = Modifier.padding(end = 15.dp)
+                  )
 
               }
           }
@@ -811,27 +1063,31 @@ Row {
                   modifier = Modifier.fillMaxSize(),
                   verticalAlignment = Alignment.CenterVertically
               ) {
-                  (dataByYear.value?.get(11) ?: null)?.let {
-                      Text(
-                          text = it,
-                          color = Color.White,
-                          style = TextStyle(fontSize = 17.sp),
-                          modifier = Modifier.padding(start = 15.dp)
-                      )
-                  }
+                  Text(
+                      text = if (dataByYear.value?.isEmpty() != true) {
+                          dataByYear.value?.get(11) ?: "No data"  // Display "No data" for empty list
+                      } else {
+                          ""  // Display empty string for null or truly empty list
+                      },
+                      color = Color.White,
+                      style = TextStyle(fontSize = 17.sp),
+                      modifier = Modifier.padding(start = 15.dp)
+                  )
                   Spacer(modifier = Modifier.weight(1f))
                   Text(
                       text = "Sixes", color = Color.White, style = TextStyle(fontSize = 17.sp)
                   )
                   Spacer(modifier = Modifier.weight(1f))
-                  (dataByYear2.value?.get(11) ?: null)?.let {
-                      Text(
-                          text = it,
-                          color = Color.White,
-                          style = TextStyle(fontSize = 17.sp),
-                          modifier = Modifier.padding(end = 15.dp)
-                      )
-                  }
+                  Text(
+                      text = if (dataByYear2.value?.isEmpty() != true) {
+                          dataByYear2.value?.get(11) ?: "No data"  // Display "No data" for empty list
+                      } else {
+                          ""  // Display empty string for null or truly empty list
+                      },
+                      color = Color.White,
+                      style = TextStyle(fontSize = 17.sp),
+                      modifier = Modifier.padding(end = 15.dp)
+                  )
 
               }
           }
@@ -846,28 +1102,507 @@ Row {
                   modifier = Modifier.fillMaxSize(),
                   verticalAlignment = Alignment.CenterVertically
               ) {
-                  (dataByYear.value?.get(12) ?: null)?.let {
-                      Text(
-                          text = it,
-                          color = Color.White,
-                          style = TextStyle(fontSize = 17.sp),
-                          modifier = Modifier.padding(start = 15.dp)
-                      )
-                  }
+                  Text(
+                      text = if (dataByYear.value?.isEmpty() != true) {
+                          dataByYear.value?.get(12)
+                              ?: "No data"  // Display "No data" for empty list
+                      } else {
+                          ""  // Display empty string for null or truly empty list
+                      },
+                      color = Color.White,
+                      style = TextStyle(fontSize = 17.sp),
+                      modifier = Modifier.padding(start = 15.dp)
+                  )
                   Spacer(modifier = Modifier.weight(1f))
                   Text(
                       text = "Dot%", color = Color.White, style = TextStyle(fontSize = 17.sp)
                   )
                   Spacer(modifier = Modifier.weight(1f))
-                  (dataByYear2.value?.get(12) ?: null)?.let {
+                  Text(
+                      text = if (dataByYear2.value?.isEmpty() != true) {
+                          dataByYear2.value?.get(12)
+                              ?: "No data"  // Display "No data" for empty list
+                      } else {
+                          ""  // Display empty string for null or truly empty list
+                      },
+                      color = Color.White,
+                      style = TextStyle(fontSize = 17.sp),
+                      modifier = Modifier.padding(end = 15.dp)
+                  )
+
+              }
+          }
+          }
+          else if(selectedbutton=="Bowling"){
+              Box(
+                  modifier = Modifier
+                      .fillMaxWidth()
+                      .height(60.dp)
+                      .background(Color(0xFF22212f))
+              ) {
+                  Row(
+                      modifier = Modifier.fillMaxSize(),
+                      verticalAlignment = Alignment.CenterVertically,
+                  ) {
                       Text(
-                          text = it,
+                          text = if (dataByYearbowling.value?.isEmpty() != true) {
+                              dataByYearbowling.value?.get(1) ?: "No data"  // Display "No data" for empty list
+                          } else {
+                              ""  // Display empty string for null or truly empty list
+                          },
+                          color = Color.White,
+                          style = TextStyle(fontSize = 17.sp),
+                          modifier = Modifier.padding(start = 15.dp)
+                      )
+                      Spacer(modifier = Modifier.weight(1f))
+                      Text(
+                          text = "Innings", color = Color.White, style = TextStyle(fontSize = 17.sp)
+                      )
+                      Spacer(modifier = Modifier.weight(1f))
+                      //Spacer(modifier = Modifier.width(102.dp))
+                      Text(
+                          text = if (dataByYear2bowling.value?.isEmpty() != true) {
+                              dataByYear2bowling.value?.get(1) ?: "No data"  // Display "No data" for empty list
+                          } else {
+                              ""  // Display empty string for null or truly empty list
+                          },
                           color = Color.White,
                           style = TextStyle(fontSize = 17.sp),
                           modifier = Modifier.padding(end = 15.dp)
                       )
-                  }
 
+                  }
+              }
+
+              Box(
+                  modifier = Modifier
+                      .fillMaxWidth()
+                      .height(60.dp)
+                      .background(Color(0xFF383743))
+              ) {
+                  Row(
+                      modifier = Modifier.fillMaxSize(),
+                      verticalAlignment = Alignment.CenterVertically
+                  ) {
+                      Text(
+                          text = if (dataByYearbowling.value?.isEmpty() != true) {
+                              dataByYearbowling.value?.get(2) ?: "No data"  // Display "No data" for empty list
+                          } else {
+                              ""  // Display empty string for null or truly empty list
+                          },
+                          color = Color.White,
+                          style = TextStyle(fontSize = 17.sp),
+                          modifier = Modifier.padding(start = 15.dp)
+                      )
+                      Spacer(modifier = Modifier.weight(1f))
+                      Text(
+                          text = "Overs", color = Color.White, style = TextStyle(fontSize = 17.sp)
+                      )
+                      Spacer(modifier = Modifier.weight(1f))
+                      Text(
+                          text = if (dataByYear2bowling.value?.isEmpty() != true) {
+                              dataByYear2bowling.value?.get(2) ?: "No data"  // Display "No data" for empty list
+                          } else {
+                              ""  // Display empty string for null or truly empty list
+                          },
+                          color = Color.White,
+                          style = TextStyle(fontSize = 17.sp),
+                          modifier = Modifier.padding(end = 15.dp)
+                      )
+
+                  }
+              }
+
+              Box(
+                  modifier = Modifier
+                      .fillMaxWidth()
+                      .height(60.dp)
+                      .background(Color(0xFF22212f))
+              ) {
+                  Row(
+                      modifier = Modifier.fillMaxSize(),
+                      verticalAlignment = Alignment.CenterVertically
+                  ) {
+                      Text(
+                          text = if (dataByYearbowling.value?.isEmpty() != true) {
+                              dataByYearbowling.value?.get(3) ?: "No data"  // Display "No data" for empty list
+                          } else {
+                              ""  // Display empty string for null or truly empty list
+                          },
+                          color = Color.White,
+                          style = TextStyle(fontSize = 17.sp),
+                          modifier = Modifier.padding(start = 15.dp)
+                      )
+                      Spacer(modifier = Modifier.weight(1f))
+                      Text(
+                          text = "Runs", color = Color.White, style = TextStyle(fontSize = 17.sp)
+                      )
+                      Spacer(modifier = Modifier.weight(1f))
+                      Text(
+                          text = if (dataByYear2bowling.value?.isEmpty() != true) {
+                              dataByYear2bowling.value?.get(3) ?: "No data"  // Display "No data" for empty list
+                          } else {
+                              ""  // Display empty string for null or truly empty list
+                          },
+                          color = Color.White,
+                          style = TextStyle(fontSize = 17.sp),
+                          modifier = Modifier.padding(end = 15.dp)
+                      )
+
+                  }
+              }
+
+              Box(
+                  modifier = Modifier
+                      .fillMaxWidth()
+                      .height(60.dp)
+                      .background(Color(0xFF383743))
+              ) {
+                  Row(
+                      modifier = Modifier.fillMaxSize(),
+                      verticalAlignment = Alignment.CenterVertically
+                  ) {
+                      Text(
+                          text = if (dataByYearbowling.value?.isEmpty() != true) {
+                              dataByYearbowling.value?.get(4) ?: "No data"  // Display "No data" for empty list
+                          } else {
+                              ""  // Display empty string for null or truly empty list
+                          },
+                          color = Color.White,
+                          style = TextStyle(fontSize = 17.sp),
+                          modifier = Modifier.padding(start = 15.dp)
+                      )
+                      Spacer(modifier = Modifier.weight(1f))
+                      Text(
+                          text = "Wickets", color = Color.White, style = TextStyle(fontSize = 17.sp)
+                      )
+                      Spacer(modifier = Modifier.weight(1f))
+                      Text(
+                          text = if (dataByYear2bowling.value?.isEmpty() != true) {
+                              dataByYear2bowling.value?.get(4) ?: "No data"  // Display "No data" for empty list
+                          } else {
+                              ""  // Display empty string for null or truly empty list
+                          },
+                          color = Color.White,
+                          style = TextStyle(fontSize = 17.sp),
+                          modifier = Modifier.padding(end = 15.dp)
+                      )
+
+                  }
+              }
+
+              Box(
+                  modifier = Modifier
+                      .fillMaxWidth()
+                      .height(60.dp)
+                      .background(Color(0xFF22212f))
+              ) {
+                  Row(
+                      modifier = Modifier.fillMaxSize(),
+                      verticalAlignment = Alignment.CenterVertically
+                  ) {
+                      Text(
+                          text = if (dataByYearbowling.value?.isEmpty() != true) {
+                              dataByYearbowling.value?.get(5) ?: "No data"  // Display "No data" for empty list
+                          } else {
+                              ""  // Display empty string for null or truly empty list
+                          },
+                          color = Color.White,
+                          style = TextStyle(fontSize = 17.sp),
+                          modifier = Modifier.padding(start = 15.dp)
+                      )
+                      Spacer(modifier = Modifier.weight(1f))
+                      Text(
+                          text = "Economy", color = Color.White, style = TextStyle(fontSize = 17.sp)
+                      )
+                      Spacer(modifier = Modifier.weight(1f))
+                      Text(
+                          text = if (dataByYear2bowling.value?.isEmpty() != true) {
+                              dataByYear2bowling.value?.get(5) ?: "No data"  // Display "No data" for empty list
+                          } else {
+                              ""  // Display empty string for null or truly empty list
+                          },
+                          color = Color.White,
+                          style = TextStyle(fontSize = 17.sp),
+                          modifier = Modifier.padding(end = 15.dp)
+                      )
+
+                  }
+              }
+
+              Box(
+                  modifier = Modifier
+                      .fillMaxWidth()
+                      .height(60.dp)
+                      .background(Color(0xFF383743))
+              ) {
+                  Row(
+                      modifier = Modifier.fillMaxSize(),
+                      verticalAlignment = Alignment.CenterVertically
+                  ) {
+                      Text(
+                          text = if (dataByYearbowling.value?.isEmpty() != true) {
+                              dataByYearbowling.value?.get(6) ?: "No data"  // Display "No data" for empty list
+                          } else {
+                              ""  // Display empty string for null or truly empty list
+                          },
+                          color = Color.White,
+                          style = TextStyle(fontSize = 17.sp),
+                          modifier = Modifier.padding(start = 15.dp)
+                      )
+                      Spacer(modifier = Modifier.weight(1f))
+                      Text(
+                          text = "Bowling Average", color = Color.White, style = TextStyle(fontSize = 17.sp)
+                      )
+                      Spacer(modifier = Modifier.weight(1f))
+                      Text(
+                          text = if (dataByYear2bowling.value?.isEmpty() != true) {
+                              dataByYear2bowling.value?.get(6) ?: "No data"  // Display "No data" for empty list
+                          } else {
+                              ""  // Display empty string for null or truly empty list
+                          },
+                          color = Color.White,
+                          style = TextStyle(fontSize = 17.sp),
+                          modifier = Modifier.padding(end = 15.dp)
+                      )
+
+                  }
+              }
+
+              Box(
+                  modifier = Modifier
+                      .fillMaxWidth()
+                      .height(60.dp)
+                      .background(Color(0xFF22212f))
+              ) {
+                  Row(
+                      modifier = Modifier.fillMaxSize(),
+                      verticalAlignment = Alignment.CenterVertically
+                  ) {
+                      Text(
+                          text = if (dataByYearbowling.value?.isEmpty() != true) {
+                              dataByYearbowling.value?.get(7) ?: "No data"  // Display "No data" for empty list
+                          } else {
+                              ""  // Display empty string for null or truly empty list
+                          },
+                          color = Color.White,
+                          style = TextStyle(fontSize = 17.sp),
+                          modifier = Modifier.padding(start = 15.dp)
+                      )
+                      Spacer(modifier = Modifier.weight(1f))
+                      Text(
+                          text = "Bowling SR", color = Color.White, style = TextStyle(fontSize = 17.sp)
+                      )
+                      Spacer(modifier = Modifier.weight(1f))
+                      Text(
+                          text = if (dataByYear2bowling.value?.isEmpty() != true) {
+                              dataByYear2bowling.value?.get(7) ?: "No data"  // Display "No data" for empty list
+                          } else {
+                              ""  // Display empty string for null or truly empty list
+                          },
+                          color = Color.White,
+                          style = TextStyle(fontSize = 17.sp),
+                          modifier = Modifier.padding(end = 15.dp)
+                      )
+
+                  }
+              }
+
+              Box(
+                  modifier = Modifier
+                      .fillMaxWidth()
+                      .height(60.dp)
+                      .background(Color(0xFF383743))
+              ) {
+                  Row(
+                      modifier = Modifier.fillMaxSize(),
+                      verticalAlignment = Alignment.CenterVertically
+                  ) {
+                      Text(
+                          text = if (dataByYearbowling.value?.isEmpty() != true) {
+                              dataByYearbowling.value?.get(8) ?: "No data"  // Display "No data" for empty list
+                          } else {
+                              ""  // Display empty string for null or truly empty list
+                          },
+                          color = Color.White,
+                          style = TextStyle(fontSize = 17.sp),
+                          modifier = Modifier.padding(start = 15.dp)
+                      )
+                      Spacer(modifier = Modifier.weight(1f))
+                      Text(
+                          text = "5Wickets", color = Color.White, style = TextStyle(fontSize = 17.sp)
+                      )
+                      Spacer(modifier = Modifier.weight(1f))
+                      Text(
+                          text = if (dataByYear2bowling.value?.isEmpty() != true) {
+                              dataByYear2bowling.value?.get(8) ?: "No data"  // Display "No data" for empty list
+                          } else {
+                              ""  // Display empty string for null or truly empty list
+                          },
+                          color = Color.White,
+                          style = TextStyle(fontSize = 17.sp),
+                          modifier = Modifier.padding(end = 15.dp)
+                      )
+
+                  }
+              }
+
+              Box(
+                  modifier = Modifier
+                      .fillMaxWidth()
+                      .height(60.dp)
+                      .background(Color(0xFF22212f))
+              ) {
+                  Row(
+                      modifier = Modifier.fillMaxSize(),
+                      verticalAlignment = Alignment.CenterVertically
+                  ) {
+                      Text(
+                          text = if (dataByYearbowling.value?.isEmpty() != true) {
+                              dataByYearbowling.value?.get(9) ?: "No data"  // Display "No data" for empty list
+                          } else {
+                              ""  // Display empty string for null or truly empty list
+                          },
+                          color = Color.White,
+                          style = TextStyle(fontSize = 17.sp),
+                          modifier = Modifier.padding(start = 15.dp)
+                      )
+                      Spacer(modifier = Modifier.weight(1f))
+                      Text(
+                          text = "Best Bowling", color = Color.White, style = TextStyle(fontSize = 17.sp)
+                      )
+                      Spacer(modifier = Modifier.weight(1f))
+                      Text(
+                          text = if (dataByYear2bowling.value?.isEmpty() != true) {
+                              dataByYear2bowling.value?.get(9) ?: "No data"  // Display "No data" for empty list
+                          } else {
+                              ""  // Display empty string for null or truly empty list
+                          },
+                          color = Color.White,
+                          style = TextStyle(fontSize = 17.sp),
+                          modifier = Modifier.padding(end = 15.dp)
+                      )
+
+                  }
+              }
+
+              Box(
+                  modifier = Modifier
+                      .fillMaxWidth()
+                      .height(60.dp)
+                      .background(Color(0xFF383743))
+              ) {
+                  Row(
+                      modifier = Modifier.fillMaxSize(),
+                      verticalAlignment = Alignment.CenterVertically
+                  ) {
+                      Text(
+                          text = if (dataByYearbowling.value?.isEmpty() != true) {
+                              dataByYearbowling.value?.get(10) ?: "No data"  // Display "No data" for empty list
+                          } else {
+                              ""  // Display empty string for null or truly empty list
+                          },
+                          color = Color.White,
+                          style = TextStyle(fontSize = 17.sp),
+                          modifier = Modifier.padding(start = 15.dp)
+                      )
+                      Spacer(modifier = Modifier.weight(1f))
+                      Text(
+                          text = "Fours", color = Color.White, style = TextStyle(fontSize = 17.sp)
+                      )
+                      Spacer(modifier = Modifier.weight(1f))
+                      Text(
+                          text = if (dataByYear2bowling.value?.isEmpty() != true) {
+                              dataByYear2bowling.value?.get(10) ?: "No data"  // Display "No data" for empty list
+                          } else {
+                              ""  // Display empty string for null or truly empty list
+                          },
+                          color = Color.White,
+                          style = TextStyle(fontSize = 17.sp),
+                          modifier = Modifier.padding(end = 15.dp)
+                      )
+
+                  }
+              }
+
+              Box(
+                  modifier = Modifier
+                      .fillMaxWidth()
+                      .height(60.dp)
+                      .background(Color(0xFF22212f))
+              ) {
+                  Row(
+                      modifier = Modifier.fillMaxSize(),
+                      verticalAlignment = Alignment.CenterVertically
+                  ) {
+                      Text(
+                          text = if (dataByYearbowling.value?.isEmpty() != true) {
+                              dataByYearbowling.value?.get(11) ?: "No data"  // Display "No data" for empty list
+                          } else {
+                              ""  // Display empty string for null or truly empty list
+                          },
+                          color = Color.White,
+                          style = TextStyle(fontSize = 17.sp),
+                          modifier = Modifier.padding(start = 15.dp)
+                      )
+                      Spacer(modifier = Modifier.weight(1f))
+                      Text(
+                          text = "Sixes", color = Color.White, style = TextStyle(fontSize = 17.sp)
+                      )
+                      Spacer(modifier = Modifier.weight(1f))
+                      Text(
+                          text = if (dataByYear2bowling.value?.isEmpty() != true) {
+                              dataByYear2bowling.value?.get(11) ?: "No data"  // Display "No data" for empty list
+                          } else {
+                              ""  // Display empty string for null or truly empty list
+                          },
+                          color = Color.White,
+                          style = TextStyle(fontSize = 17.sp),
+                          modifier = Modifier.padding(end = 15.dp)
+                      )
+
+                  }
+              }
+
+              Box(
+                  modifier = Modifier
+                      .fillMaxWidth()
+                      .height(60.dp)
+                      .background(Color(0xFF383743))
+              ) {
+                  Row(
+                      modifier = Modifier.fillMaxSize(),
+                      verticalAlignment = Alignment.CenterVertically
+                  ) {
+                      Text(
+                          text = if (dataByYearbowling.value?.isEmpty() != true) {
+                              dataByYearbowling.value?.get(12)
+                                  ?: "No data"  // Display "No data" for empty list
+                          } else {
+                              ""  // Display empty string for null or truly empty list
+                          },
+                          color = Color.White,
+                          style = TextStyle(fontSize = 17.sp),
+                          modifier = Modifier.padding(start = 15.dp)
+                      )
+                      Spacer(modifier = Modifier.weight(1f))
+                      Text(
+                          text = "Dot%", color = Color.White, style = TextStyle(fontSize = 17.sp)
+                      )
+                      Spacer(modifier = Modifier.weight(1f))
+                      Text(
+                          text = if (dataByYear2bowling.value?.isEmpty() != true) {
+                              dataByYear2bowling.value?.get(12)
+                                  ?: "No data"  // Display "No data" for empty list
+                          } else {
+                              ""  // Display empty string for null or truly empty list
+                          },
+                          color = Color.White,
+                          style = TextStyle(fontSize = 17.sp),
+                          modifier = Modifier.padding(end = 15.dp)
+                      )
+
+                  }
               }
           }
 
@@ -917,7 +1652,7 @@ fun DisplayBoxWithLabel(data: String?, label: String) {
 }*/
 
 @Composable
-fun PlayerHeader(name:String){
+fun PlayerHeader(name1:String){
     OutlinedCard (colors = CardDefaults.cardColors(
         containerColor = Color(0xFF22212f),
 contentColor = Color(0xFF8fcce3)
@@ -944,7 +1679,7 @@ contentColor = Color(0xFF8fcce3)
 
         val playerName = remember { mutableStateOf<String?>(null) }
         val info = remember { mutableStateOf<List<String>?>(null) }
-        val playerinfo= getinfo(name)
+        val playerinfo= getinfo(name1)
         LaunchedEffect(Unit) {
             val (fetchedPlayerName, fetchedInfo) = playerinfo.await()
            playerName.value=fetchedPlayerName
@@ -977,13 +1712,13 @@ contentColor = Color(0xFF8fcce3)
 @Composable
 fun pp(){
     Column (modifier = Modifier.padding(start=50.dp)){
-        DisplayPlayerStats()
+        //DisplayPlayerStats()
     }
 
 }
 
 @Composable
-fun BattingAndBowlingButtons() {
+fun BattingAndBowlingButtons(selectedindex1:Int?,selectedindex3:Int?) :String{
     val (selectedButton, setSelectedButton) = remember { mutableStateOf("batting") }
 
     Row(
@@ -992,7 +1727,8 @@ fun BattingAndBowlingButtons() {
         horizontalArrangement = Arrangement.SpaceEvenly // Buttons split space evenly
     ) {
         Button(
-            onClick = { setSelectedButton("batting") },
+            onClick = { setSelectedButton("batting")
+                      },
             colors = if (selectedButton == "batting") ButtonDefaults.buttonColors(Color(0xFF8fcce3)) else ButtonDefaults.buttonColors(Color(0xFF22212f)),
             shape = RoundedCornerShape(topStart = 15.dp),
             modifier = Modifier
@@ -1019,82 +1755,8 @@ fun BattingAndBowlingButtons() {
                 Text(text = "Bowling", color = Color(0xFF87898e))
         }
     }
-}
-@Composable
-fun dropdownbar(){
-    CustomDropdownMenu(list = listOf("All","Test","Odi","T20I","Ipl"), defaultSelected = "All", color = Color(0xFF8fcce3), modifier = Modifier, onSelected ={1} )
+    return selectedButton
 }
 
-@Composable
-fun CustomDropdownMenu(
-    list: List<String>, // Menu Options
-    defaultSelected: String, // Default Selected Option on load
-    color: Color, // Color
-    modifier: Modifier, //
-    onSelected: (Int) -> Unit, // Pass the Selected Option
-) {
-    var selectedIndex by remember { mutableStateOf(list.indexOf(defaultSelected)) }
-    var expand by remember { mutableStateOf(false) }
-    var stroke by remember { mutableStateOf(1) }
-    Box(
-        modifier
-            .padding(8.dp)
-            .width(70.dp)
-            .height(45.dp)
-            .border(
-                border = BorderStroke(stroke.dp, color),
-                shape = RoundedCornerShape(4.dp)
-            )
-            .clickable {
-                expand = true
-                stroke = if (expand) 2 else 1
-            },
-        contentAlignment = Alignment.Center
-    ) {
 
-        Text(
-            text =  list[selectedIndex],
-            color = color,
-            fontSize = 12.sp,
-            fontWeight = FontWeight.SemiBold,
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp)
-        )
 
-        DropdownMenu(
-            expanded = expand,
-            onDismissRequest = {
-                expand = false
-                stroke = if (expand) 2 else 1
-            },
-            properties = PopupProperties(
-                focusable = false,
-                dismissOnBackPress = true,
-                dismissOnClickOutside = true,
-            ),
-            modifier = Modifier
-                .background(Color(0xFF171825))
-                .padding(2.dp)
-                .fillMaxWidth(.4f)
-        ) {
-            list.forEachIndexed { index, item ->
-                DropdownMenuItem(
-                    text = {
-                        Text(
-                            text = item,
-                            color = color,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                    },
-                    onClick = {
-                        selectedIndex = index
-                        expand = false
-                        stroke = if (expand) 2 else 1
-                        onSelected(selectedIndex)
-                    }
-                )
-            }
-        }
-
-    }
-}
