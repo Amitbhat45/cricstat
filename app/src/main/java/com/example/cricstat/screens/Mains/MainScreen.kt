@@ -244,6 +244,7 @@ fun MainSCreen(userData: UserData?,
                                             )
                                         }
                                         Spacer(modifier = Modifier.height(10.dp))
+
                                         getRecentDomMatches(viewModel = myViewModel)
 
                                     }

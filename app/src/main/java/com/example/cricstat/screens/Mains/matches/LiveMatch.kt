@@ -138,9 +138,9 @@ fun getLiveDomMatches(viewModel:ViewModelmatchList) {
             }
         }
 
-        LazyRow (){
-            items(filteredMatches) { match ->
-                //val imgid=match.matchInfo.team1.imageId.toString()
+        Column (modifier = Modifier.padding(start=10.dp)){
+            for (match in filteredMatches) {
+
                 liveLegDomScoreCard(match = match)
             }
         }

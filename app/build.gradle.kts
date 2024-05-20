@@ -115,7 +115,7 @@ dependencies {
     implementation ("com.github.bumptech.glide:glide:4.12.0")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
     implementation ("com.github.bumptech.glide:compose:1.0.0-beta01")
-
+    //implementation("androidx.core:core-splashscreen:1.0.1")
 
     implementation ("org.jsoup:jsoup:1.17.2")
     implementation("com.google.firebase:firebase-firestore")

@@ -120,12 +120,12 @@ fun getUpcomingDomMatches(viewModel: ViewModelmatchList) {
             }
         }
 
-            LazyRow() {
-                items(filteredMatches) { match ->
-                    //val imgid=match.matchInfo.team1.imageId.toString()
-                    upcomingLegDomScoreCard(match = match)
-                }
+        Column (modifier = Modifier.padding(start=10.dp)){
+            for (match in filteredMatches) {
+
+                upcomingLegDomScoreCard(match = match)
             }
+        }
         }
     }
 

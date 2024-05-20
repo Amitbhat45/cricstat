@@ -94,6 +94,7 @@ fun DisplayPlayerStats(player1:String,player2:String) {
       var stroke by remember { mutableStateOf(1) }
 
       val list1 = years1.value
+      val bowlinglist1=years1bowling.value
       // val size=years1?.value?.size
       val defaultSelected1 = "Years"
       val modifier1 = Modifier
@@ -109,6 +110,7 @@ fun DisplayPlayerStats(player1:String,player2:String) {
       var stroke2 by remember { mutableStateOf(1) }
 
       val list3 = years2.value
+      val bowlinglist2=years2bowling.value
       // val size=years1?.value?.size
       val defaultSelected3 = "Years"
       var selectedIndex3 by remember { mutableStateOf(list1?.indexOf(defaultSelected1)) }
@@ -224,7 +226,12 @@ Row {
                     .padding(2.dp)
                     .fillMaxWidth(.4f)
             ) {
-                list1?.forEachIndexed { index1, item1 ->
+                val dropdownList = if (selectedButtonState == "batting") {
+                    list1 ?: emptyList()
+                } else {
+                    bowlinglist1 ?: emptyList()
+                }
+                dropdownList?.forEachIndexed { index1, item1 ->
                     DropdownMenuItem(
                         text = {
                             Text(
@@ -354,7 +361,12 @@ Row {
                 .padding(2.dp)
                 .fillMaxWidth(.4f)
         ) {
-            list3?.forEachIndexed { index3, item3 ->
+            val dropdownList2 = if (selectedButtonState == "batting") {
+                list3 ?: emptyList()
+            } else {
+                bowlinglist2 ?: emptyList()
+            }
+            dropdownList2?.forEachIndexed { index3, item3 ->
                 DropdownMenuItem(
                     text = {
                         Text(
@@ -660,8 +672,8 @@ Row {
               BattingAndBowlingButtons()
 
           }*/
-         val selectedbutton= BattingAndBowlingButtons(selectedIndex1,selectedIndex3)
-          if(selectedbutton=="batting"){
+          BattingAndBowlingButtons(selectedIndex1,selectedIndex3)
+          if(selectedButtonState=="batting"){
           Box(
               modifier = Modifier
                   .fillMaxWidth()
@@ -1133,7 +1145,7 @@ Row {
               }
           }
           }
-          else if(selectedbutton=="Bowling"){
+          else if(selectedButtonState=="Bowling"){
               Box(
                   modifier = Modifier
                       .fillMaxWidth()
@@ -1716,10 +1728,10 @@ fun pp(){
     }
 
 }
-
+var selectedButtonState = "batting"
 @Composable
-fun BattingAndBowlingButtons(selectedindex1:Int?,selectedindex3:Int?) :String{
-    val (selectedButton, setSelectedButton) = remember { mutableStateOf("batting") }
+fun BattingAndBowlingButtons(selectedindex1:Int?,selectedindex3:Int?) {
+    val (selectedButton, setSelectedButton) = remember { mutableStateOf(selectedButtonState) }
 
     Row(
         modifier = Modifier.fillMaxWidth(), // Buttons fill entire row width
@@ -1728,6 +1740,8 @@ fun BattingAndBowlingButtons(selectedindex1:Int?,selectedindex3:Int?) :String{
     ) {
         Button(
             onClick = { setSelectedButton("batting")
+                selectedButtonState = "batting"
+
                       },
             colors = if (selectedButton == "batting") ButtonDefaults.buttonColors(Color(0xFF8fcce3)) else ButtonDefaults.buttonColors(Color(0xFF22212f)),
             shape = RoundedCornerShape(topStart = 15.dp),
@@ -1742,7 +1756,8 @@ fun BattingAndBowlingButtons(selectedindex1:Int?,selectedindex3:Int?) :String{
         }
 
         Button(
-            onClick = { setSelectedButton("Bowling") },
+            onClick = { setSelectedButton("Bowling")
+                selectedButtonState = "Bowling"},
             colors = if (selectedButton == "Bowling") ButtonDefaults.buttonColors(Color(0xFF8fcce3)) else ButtonDefaults.buttonColors(Color(0xFF22212f)),
             shape = RoundedCornerShape(topEnd = 15.dp),
             modifier = Modifier
@@ -1755,7 +1770,7 @@ fun BattingAndBowlingButtons(selectedindex1:Int?,selectedindex3:Int?) :String{
                 Text(text = "Bowling", color = Color(0xFF87898e))
         }
     }
-    return selectedButton
+   // return selectedButton
 }
 
 

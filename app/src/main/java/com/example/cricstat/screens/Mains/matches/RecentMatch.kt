@@ -125,14 +125,15 @@ fun getRecentDomMatches(viewModel: ViewModelmatchList) {
             }
         }
 
-            LazyRow (){
-                items(filteredMatches) { match ->
-                    //val imgid=match.matchInfo.team1.imageId.toString()
-                    recentLegDomScoreCard(match = match)
-                }
+        Column (modifier = Modifier.padding(start=10.dp)){
+            for (match in filteredMatches) {
+                //val imgid=match.matchInfo.team1.imageId.toString() (assuming you don't need this line)
+                recentLegDomScoreCard(match = match)
             }
         }
-    }
+            }
+        }
+
 
 
 
@@ -357,7 +358,7 @@ fun recentLegDomScoreCard(match:Matche) {
                             fontWeight = FontWeight.W500,
                         )
                         Spacer(modifier = Modifier.width(15.dp))
-                        if(match.matchScore.team1Score!=null){
+                        if(match.matchScore?.team1Score!=null){
                             Text(text = "${match.matchScore?.team1Score.inngs1?.runs}-${match.matchScore?.team1Score.inngs1?.wickets}", color = Color(0xFF6eb5ee),style = TextStyle(fontSize = 20.sp), fontWeight = FontWeight.Bold)
                             Spacer(modifier = Modifier.width(5.dp))
                             Text(text = "(${match.matchScore?.team1Score.inngs1?.overs})",color = Color(0xFFffffff),style = TextStyle(fontSize = 11.5.sp))
@@ -407,7 +408,7 @@ fun recentLegDomScoreCard(match:Matche) {
                             fontWeight = FontWeight.W500,
                         )
                         Spacer(modifier = Modifier.width(15.dp))
-                        if(match.matchScore.team1Score!=null){
+                        if(match.matchScore?.team1Score!=null){
                             Text(text = "${match.matchScore?.team2Score?.inngs1?.runs}-${match.matchScore?.team2Score?.inngs1?.wickets}", color = Color(0xFF6eb5ee),style = TextStyle(fontSize = 20.sp), fontWeight = FontWeight.Bold)
                             Spacer(modifier = Modifier.width(5.dp))
                             Text(text = "(${match.matchScore?.team2Score?.inngs1?.overs})",color = Color(0xFFffffff),style = TextStyle(fontSize = 11.5.sp))
@@ -427,7 +428,7 @@ fun recentLegDomScoreCard(match:Matche) {
 
                                 .padding(start = 15.dp))
                         Spacer(modifier = Modifier.width(15.dp))
-                        if(match.matchScore.team1Score!=null){
+                        if(match.matchScore?.team1Score!=null){
                             Text(text = "${match.matchScore?.team2Score?.inngs1?.runs}-${match.matchScore?.team2Score?.inngs1?.wickets}", color = Color(0xFF6eb5ee),style = TextStyle(fontSize = 20.sp), fontWeight = FontWeight.Bold)
                             Spacer(modifier = Modifier.width(5.dp))
                             Text(text = "(${match.matchScore?.team2Score?.inngs1?.overs})",color = Color(0xFFffffff),style = TextStyle(fontSize = 11.5.sp))
